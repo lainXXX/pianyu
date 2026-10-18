@@ -113,7 +113,7 @@ const secretFieldsOf = (kind, hint) => KIND_SECRETS[kind] || [{name: "key", labe
 function renderEngines() {
   $("engines").querySelector("tbody").replaceChildren(...engineData.services.map(s => {
     const tr = document.createElement("tr");
-    [s.label, s.model, s.configured ? "已配置" : "未配置"]
+    [s.label, s.model, s.configured ? "" : "未配置"]
       .forEach(t => { const td = document.createElement("td"); td.textContent = t; tr.append(td); });
     const td = document.createElement("td");
     td.append(defaultChoice(s, s.id === engineData.default), button("编辑", "edit", s.id, `编辑：${s.label}`),
@@ -210,7 +210,7 @@ function renderLLMs() {
   }
   body.replaceChildren(...llmData.services.map(s => {
     const tr = document.createElement("tr");
-    [s.label, s.model, s.configured ? (s.key_from ? "共用百炼凭据" : "已配置") : "未配置"].forEach(t => {
+    [s.label, s.model, s.configured ? (s.key_from ? "共用百炼凭据" : "") : "未配置"].forEach(t => {
       const td = document.createElement("td"); td.textContent = t; tr.append(td);
     });
     const td = document.createElement("td");
