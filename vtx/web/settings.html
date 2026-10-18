@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>设置 · 片语</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/static/common.css">
+<style>
+  :root { --fg: #1f1d1a; --muted: #7a746a; }
+  body { font: 15px/1.7 "PingFang SC", "Microsoft YaHei", system-ui, sans-serif; }
+  .serif { font-family: "Source Han Serif SC", "Noto Serif SC", "Songti SC", "SimSun", serif; }
+  header { padding: 0 28px; }
+  .logo { font-size: 22px; letter-spacing:.12em; }
+  header nav { display: flex; gap: 4px; }
+  header nav a { padding: 6px 10px; }
+  header nav a[aria-current=page] { color: var(--fg); background: #eeeae1; }
+  .set-container { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 48px; max-width: 1000px; margin: 0 auto; padding: 48px 24px 100px; }
+  .set-nav { display: flex; flex-direction: column; flex-wrap: nowrap; gap: 2px; position: sticky; top: 90px; align-self: start; border: 0; padding: 0; margin: 0; }
+  .set-nav button { border: 0; background: none; text-align: left; padding: 8px 12px; border-radius: 8px; color: var(--muted); font-weight: normal; }
+  .set-nav button:hover { background: #f1eee8; color: var(--fg); }
+  .set-nav button[aria-selected=true] { background: #eae4d9; color: var(--fg); font-weight: 500; }
+  .set-body { min-width: 0; }
+  .set-body h2 { font-size: 24px; font-weight: 600; margin: 0 0 4px; line-height: 1.7; }
+  .set-body h3 { font-size: 15px; font-weight: 500; }
+  .set-body > section > p:first-of-type { margin-top: 0; }
+  .muted { font-size: 14px; }
+  .item-list { list-style: none; padding: 0; margin: 20px 0; }
+  .item-list li { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 14px; padding: 16px 18px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; }
+  .setting-item-info { flex: 1 1 240px; min-width: 0; overflow-wrap: anywhere; font-weight: 500; }
+  .setting-item-info .muted { display: block; font-size: 13px; font-weight: 400; }
+  .item-list button.secondary, table.list button.secondary { border: 0; background: none; color: var(--muted); font-size: 13px; font-weight: 400; padding: 2px 0; margin: 0; border-radius: 0; white-space: nowrap; }
+  .item-list button.secondary:hover, table.list button.secondary:hover { color: var(--fg); background: none; }
+  .item-list button.danger:hover, table.list button.danger:hover { color: var(--bad); }
+  table.list { display: block; width: 100%; border-collapse: separate; margin: 20px 0; }
+  table.list thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  table.list tbody { display: block; }
+  table.list tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; column-gap: 14px; align-items: center; padding: 16px 18px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; }
+  table.list td { border: 0; padding: 0; overflow-wrap: anywhere; }
+  table.list td:first-child { grid-column: 1; grid-row: 1; font-weight: 500; }
+  .default-badge { display: inline-block; font-size: 12px; font-weight: 400; color: var(--accent); border: 1px solid #e9c3b1; background: #fbefe8; border-radius: 999px; padding: 1px 10px; margin-left: 10px; vertical-align: middle; white-space: nowrap; }
+  table.list td:nth-child(2) { grid-column: 1; grid-row: 2; color: var(--muted); font-size: 13px; }
+  table.list td:nth-child(3) { grid-column: 2; grid-row: 1 / span 2; color: var(--muted); font-size: 12px; max-width: 120px; }
+  table.list td:last-child:not(:first-child) { grid-column: 3; grid-row: 1 / span 2; display: flex; justify-content: end; gap: 12px; flex-wrap: wrap; max-width: 180px; }
+  table.list td[colspan] { grid-column: 1 / -1; font-weight: 400; color: var(--muted); }
+  .setting-editor { margin: 14px 0 22px; }
+  .setting-editor > summary { list-style: none; cursor: pointer; border: 1px solid var(--line); background: var(--paper); border-radius: 999px; padding: 6px 15px; width: max-content; color: var(--accent); text-align: center; font-size: 13px; }
+  .setting-editor > summary::-webkit-details-marker { display: none; }
+  .setting-editor > summary:hover { color: var(--accent); border-color: var(--accent); }
+  .setting-editor > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .setting-editor[open] > summary { margin-bottom: 12px; }
+  .setting-editor .card { margin-top: 0; }
+  .card { box-shadow: none; padding: 22px 24px; }
+  form.stack label { font-size: 13px; font-weight: 500; margin-top: 14px; margin-bottom: 5px; }
+  form.stack label.inline { font-weight: 400; }
+  form.stack input, form.stack select, form.stack textarea { font-size: 14px; }
+  form.stack .actions { gap: 10px; }
+  .actions button.secondary { padding: 6px 18px; }
+  .actions button[type=submit] { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .actions button[type=submit]:hover { background: #9e4623; }
+  .secret { gap: 8px; }
+  .secret input { min-width: 0; }
+  .vars { line-height: 2; }
+  .vars code { background: #eeeae1; padding: 2px 6px; border-radius: 4px; margin-right: 4px; font: 12px ui-monospace, monospace; }
+  #frame-form > div { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; margin-top: 14px; }
+  #frame-form > div > label { margin-top: 0; }
+  #tpl-preview-img { max-width: 100%; border: 1px solid var(--line); border-radius: 8px; margin-top: 12px; }
+  @media (max-width: 760px) {
+    header { padding: 0 18px; }
+    .set-container { grid-template-columns: minmax(0, 1fr); gap: 28px; padding: 28px 20px 80px; }
+    .set-nav { position: static; flex-direction: row; flex-wrap: wrap; gap: 4px; }
+    .set-nav button { padding: 6px 10px; font-size: 14px; }
+    table.list tbody tr { grid-template-columns: minmax(0, 1fr) auto; row-gap: 2px; }
+    table.list td:nth-child(3) { grid-column: 1; grid-row: 3; max-width: none; }
+    table.list td:last-child:not(:first-child) { grid-column: 2; grid-row: 1 / span 3; max-width: 135px; gap: 10px; }
+    .card { padding: 18px; }
+    #cookie-file { max-width: 100%; }
+  }
+  .back-home { display:grid; place-items:center; width:32px; height:32px; font-size:23px; color:var(--muted); border-radius:50%; }
+  .back-home:hover { background:#eeeae1; text-decoration:none; }
+  .section-heading { display:flex; align-items:center; gap:12px; }
+  .section-heading h2 { margin:0; }
+  button.editor-new { margin-left:auto; border-radius:999px; padding:5px 16px; font-size:13px; color:var(--accent); }
+  .editor-dialog { width:min(760px,calc(100vw - 32px)); max-height:90dvh; padding:0; border:1px solid var(--line); border-radius:16px; background:var(--bg); color:var(--fg); }
+  .editor-dialog::backdrop { background:#211c1960; backdrop-filter:blur(4px); }
+  .editor-dialog .card { margin:0; border:0; border-radius:0; background:none; }
+  .editor-dialog strong { display:block; padding-right:32px; font-size:20px; font-weight:500; }
+  button.editor-close { position:absolute; right:18px; top:16px; width:32px; height:32px; padding:0; border:0; background:none; color:var(--muted); font-size:24px; }
+  button.help { position:relative; border:1px solid #d7d0c4; background:none; color:var(--muted); width:20px; height:20px; padding:0; font:12px/18px system-ui; font-weight:600; }
+  .help::after { content:attr(data-tip); display:none; position:absolute; left:0; top:28px; z-index:30; width:250px; max-width:65vw; padding:10px 13px; background:var(--fg); color:var(--paper); border-radius:8px; box-shadow:0 4px 18px #211c1920; font:12px/1.7 system-ui; text-align:left; }
+  .help:hover::after,.help:focus::after { display:block; }
+  .choice-grid { display:flex; flex-wrap:wrap; gap:8px 18px; }
+  .choice-grid label { display:flex; align-items:center; gap:6px; margin:4px 0!important; font-weight:400!important; }
+  .binding-field { padding:0; border:0; margin:18px 0; }
+  .binding-field legend,#of-layouts legend { font-size:13px; font-weight:500; margin-bottom:8px; }
+  .field-help { font-size:12px; margin:10px 0 18px; color:var(--muted); }
+  .field-help summary { cursor:pointer; }
+  .field-help .vars { padding:12px 0 0; font-size:12px; }
+  .cookie-platforms { margin:22px 0 32px; }
+  .cookie-platform { display:flex; align-items:center; gap:14px; padding:18px; margin-bottom:10px; border:1px solid var(--line); border-radius:12px; background:var(--paper); }
+  .cookie-platform strong { flex:1; }
+  .cookie-platform .status { font-size:12px; color:var(--muted); }
+  .cookie-platform .status.ok { color:var(--ok); }
+  .cookie-platform button { padding:5px 14px; font-size:13px; }
+  .cookie-platform .cookie-state { display:flex; flex-direction:column; align-items:flex-end; min-width:0; }
+  .cookie-platform .login-error { color:var(--bad); font-size:12px; max-width:220px; overflow-wrap:anywhere; }
+  .cookie-platform[aria-busy=true] .status::before { content:""; display:inline-block; width:8px; height:8px; border:1px solid var(--line); border-top-color:var(--accent); border-radius:50%; margin-right:7px; animation:login-spin 1s linear infinite; }
+  @keyframes login-spin { to { transform:rotate(360deg); } }
+  @media(prefers-reduced-motion:reduce) { .cookie-platform[aria-busy=true] .status::before { animation:none; } }
+  .provider-links { display:flex; flex-wrap:wrap; gap:16px; margin:9px 0 16px; font-size:12px; }
+  .provider-links[hidden] { display:none; }
+  .provider-links a { color:var(--accent); }
+  .project-paths { margin:22px 0; }
+  .project-paths > div { padding:18px 20px; border:1px solid var(--line); border-radius:12px; background:var(--paper); margin:10px 0; }
+  .project-paths dt { font-size:13px; color:var(--muted); margin-bottom:5px; }
+  .project-paths dd { margin:0; overflow-wrap:anywhere; font:13px/1.8 ui-monospace,Consolas,monospace; user-select:all; }
+  .default-choice { font-size:18px!important; color:var(--muted); }
+  .default-choice[aria-pressed=true] { color:var(--accent)!important; opacity:1; }
+  .secret-eye { display:grid; place-items:center; width:40px; padding:7px!important; border:0!important; }
+  .secret-eye svg { width:19px; height:19px; }
+  .secret { display:flex; }
+  .secret input { flex:1; }
+  [aria-live]:empty { display:none; }
+  #layout-preview { border:1px solid var(--line); border-radius:16px; padding:20px; width:min(680px,calc(100vw - 32px)); max-height:88vh; color:var(--fg); background:var(--bg); }
+  #layout-preview::backdrop { background:#211c1960; backdrop-filter:blur(4px); }
+  .preview-heading { display:flex; align-items:center; justify-content:space-between; gap:20px; }
+  .preview-heading button { padding:0; width:32px; height:32px; font-size:24px; background:none; border:0; color:var(--muted); }
+  #tpl-preview-img { display:block; width:100%; height:auto; }
+  #tpl-preview-img[hidden] { display:none; }
+  #of-layout-boxes { display:flex; flex-wrap:wrap; gap:8px 18px; }
+  #of-layout-boxes label { margin:0!important; }
+  #tf-html { font-size:12px; }
+  @media(max-width:480px) { header { gap:10px; } header nav a { padding:6px; font-size:13px; } .set-container { padding-inline:16px; } table.list td:last-child:not(:first-child) { max-width:116px; gap:9px; } .cookie-platform { gap:10px; padding:14px; } .item-list li { padding:14px; } }
+</style>
+</head>
+<body>
+<header>
+  <a class="back-home" href="/" aria-label="返回首页" title="返回首页"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m12 5-7 7 7 7M5 12h15"/></svg></a>
+  <nav><a href="/#history">历史</a><a href="/settings" aria-current="page">设置</a></nav>
+</header>
+<div class="set-container">
+  <nav class="set-nav" role="tablist" aria-label="设置分类">
+    <button role="tab" id="tab-asr" aria-controls="panel-asr" aria-selected="true" type="button">识别服务</button>
+    <button role="tab" id="tab-llm" aria-controls="panel-llm" aria-selected="false" type="button">大模型</button>
+    <button role="tab" id="tab-outputs" aria-controls="panel-outputs" aria-selected="false" type="button">输出风格</button>
+    <button role="tab" id="tab-layouts" aria-controls="panel-layouts" aria-selected="false" type="button">版式</button>
+    <button role="tab" id="tab-system" aria-controls="panel-system" aria-selected="false" type="button">全局规则</button>
+    <button role="tab" id="tab-frame" aria-controls="panel-frame" aria-selected="false" type="button">页眉页脚</button>
+    <button role="tab" id="tab-cookie" aria-controls="panel-cookie" aria-selected="false" type="button">Cookie 与代理</button>
+    <button role="tab" id="tab-project" aria-controls="panel-project" aria-selected="false" type="button" hidden>项目</button>
+  </nav>
+  <div class="set-body">
+
+<section id="panel-asr" role="tabpanel" aria-labelledby="tab-asr">
+  <h2 class="serif">识别服务</h2>
+  <table id="engines" class="list">
+    <caption class="sr-only">已配置的识别服务</caption>
+    <thead><tr><th scope="col">名称</th><th scope="col">模型</th><th scope="col">状态</th><th scope="col"><span class="sr-only">操作</span></th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <p id="engine-list-msg" class="muted" aria-live="polite"></p>
+  <form id="engine-form" class="card stack">
+    <strong id="engine-form-title">添加识别服务</strong>
+    <input type="hidden" id="ef-id">
+    <label for="ef-preset">厂商</label><select id="ef-preset"></select>
+    <nav id="ef-provider-links" class="provider-links" aria-label="识别厂商链接" hidden></nav>
+    <label for="ef-label">名称</label><input id="ef-label" type="text" autocomplete="off">
+    <div id="ef-url-row">
+      <label for="ef-url">接口地址</label>
+      <input id="ef-url" type="text" autocomplete="off">
+      <label class="inline"><input id="ef-local" type="checkbox"> 允许内网地址</label>
+    </div>
+    <label for="ef-model">模型</label><input id="ef-model" type="text" autocomplete="off">
+    <div id="ef-secrets"></div>
+    <div class="actions">
+      <button id="ef-save" type="submit" class="secondary">保存</button>
+      <button id="ef-test" type="button" class="secondary" hidden>测试连接</button>
+      <button id="ef-cancel" type="button" class="secondary" hidden>取消</button>
+    </div>
+  <p id="engine-msg" class="muted" aria-live="polite"></p>
+  </form>
+</section>
+
+<section id="panel-llm" role="tabpanel" aria-labelledby="tab-llm" hidden>
+  <h2 class="serif">大模型</h2>
+  <table id="llms" class="list">
+    <caption class="sr-only">已配置的大模型服务</caption>
+    <thead><tr><th scope="col">名称</th><th scope="col">模型</th><th scope="col">状态</th><th scope="col"><span class="sr-only">操作</span></th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <p id="llm-list-msg" class="muted" aria-live="polite"></p>
+  <form id="llm-form" class="card stack">
+    <strong id="llm-form-title">添加大模型服务</strong>
+    <input type="hidden" id="lf-id">
+    <label for="lf-preset">服务商</label><select id="lf-preset"></select>
+    <nav id="lf-provider-links" class="provider-links" aria-label="模型厂商链接" hidden></nav>
+    <label for="lf-label">名称</label><input id="lf-label" type="text" autocomplete="off">
+    <label for="lf-url">接口地址</label><input id="lf-url" type="text" autocomplete="off">
+    <label class="inline"><input id="lf-local" type="checkbox"> 允许内网地址</label>
+    <label for="lf-model">模型</label><input id="lf-model" type="text" autocomplete="off">
+    <label for="lf-context">上下文长度（Token）</label><input id="lf-context" type="number" min="2000">
+    <div id="lf-secrets"></div>
+    <p class="muted" id="lf-reuse" hidden>共用百炼凭据</p>
+    <div class="actions">
+      <button id="lf-save" type="submit" class="secondary">保存</button>
+      <button id="lf-test" type="button" class="secondary">测试连接</button>
+      <button id="lf-cancel" type="button" class="secondary" hidden>取消</button>
+    </div>
+  <p id="llm-msg" class="muted" aria-live="polite"></p>
+  </form>
+</section>
+
+<section id="panel-outputs" role="tabpanel" aria-labelledby="tab-outputs" hidden>
+  <div class="section-heading"><h2 class="serif">输出风格</h2><button class="help" type="button" aria-label="输出风格帮助" data-tip="Prompt 决定内容组织，版式决定图片呈现。切换版式不调用模型。">?</button></div>
+  <ul id="out-list" class="item-list"></ul>
+  <p><label class="inline"><input type="checkbox" id="out-show-hidden"> 显示隐藏项</label></p>
+  <p id="out-list-msg" class="muted" aria-live="polite"></p>
+  <p id="out-msg" class="muted" aria-live="polite"></p>
+  <form id="out-form" class="card stack">
+    <strong id="out-form-title">新建输出风格</strong>
+    <input type="hidden" id="of-id">
+    <label for="of-kind">内容类型</label><select id="of-kind"></select>
+    <label for="of-name">名称</label><input id="of-name" type="text" autocomplete="off">
+    <fieldset id="of-layouts" style="border:0;padding:0;margin:.6rem 0 0">
+      <legend>可用版式 <button class="help" type="button" aria-label="版式顺序帮助" data-tip="第一项为默认版式。至少保留一个。">?</button></legend>
+      <div id="of-layout-boxes"></div>
+    </fieldset>
+    <label for="of-prompt">提示词</label>
+    <textarea id="of-prompt" rows="16" spellcheck="false"></textarea>
+    <details class="field-help"><summary>变量与格式</summary><div class="muted vars" id="of-vars"></div></details>
+    <div class="actions">
+      <button id="of-save" type="submit" class="secondary">保存</button>
+      <button id="of-cancel" type="button" class="secondary" hidden>取消</button>
+    </div>
+  </form>
+</section>
+
+<section id="panel-layouts" role="tabpanel" aria-labelledby="tab-layouts" hidden>
+  <div class="section-heading"><h2 class="serif">版式</h2><button class="help" type="button" aria-label="版式帮助" data-tip="HTML 与 CSS 模板。文章和要点使用不同的数据结构，只能绑定兼容风格。">?</button></div>
+  <h3>要点版式</h3><ul id="lay-list-points" class="item-list"></ul>
+  <h3>文章版式</h3><ul id="lay-list-article" class="item-list"></ul>
+  <p id="tpl-list-msg" class="muted" aria-live="polite"></p>
+  <p id="tpl-msg" class="muted" aria-live="polite"></p>
+  <form id="tpl-form" class="card stack">
+    <strong id="tpl-form-title">新建版式</strong>
+    <input type="hidden" id="tf-id">
+    <label for="tf-group">内容类型</label><select id="tf-group"><option value="article">文章</option><option value="points">要点</option></select>
+    <label for="tf-name">名称</label><input id="tf-name" type="text" autocomplete="off">
+    <div class="row" style="margin-top:.8rem">
+      <label for="tf-width" style="margin:0">宽度（px）</label><input id="tf-width" type="number" min="320" max="4000" style="width:7rem">
+      <label for="tf-height" style="margin:0" id="tf-height-label">高度</label>
+      <select id="tf-height" style="width:auto"><option value="auto">长图</option><option value="fixed">固定高度</option></select>
+      <label for="tf-height-px" class="sr-only">固定高度（px）</label>
+      <input id="tf-height-px" type="number" min="300" max="8000" style="width:7rem" hidden>
+    </div>
+    <fieldset class="binding-field"><legend>输出风格</legend><div id="tf-output-boxes" class="choice-grid"></div></fieldset>
+    <label for="tf-html">模板内容</label>
+    <textarea id="tf-html" rows="18" spellcheck="false"></textarea>
+    <details class="field-help"><summary>模板变量</summary><div class="muted vars" id="tf-vars"></div></details>
+    <div class="actions">
+      <button id="tf-preview" type="button" class="secondary">预览</button>
+      <button id="tf-save" type="submit" class="secondary">保存</button>
+      <button id="tf-cancel" type="button" class="secondary" hidden>取消</button>
+    </div>
+  </form>
+</section>
+
+<section id="panel-system" role="tabpanel" aria-labelledby="tab-system" hidden>
+  <div class="section-heading"><h2 class="serif">全局规则</h2><button class="help" type="button" aria-label="全局规则帮助" data-tip="所有风格共用的校正与表达规则。保存后用于后续生成，已有结果不变。">?</button></div>
+  <form id="system-form" class="stack"><label for="system-prompt">系统提示词</label><textarea id="system-prompt" rows="18" spellcheck="false"></textarea>
+    <div class="actions"><button type="submit">保存</button></div><p id="system-msg" class="muted" aria-live="polite"></p></form>
+</section>
+<section id="panel-frame" role="tabpanel" aria-labelledby="tab-frame" hidden>
+  <div class="section-heading"><h2 class="serif">页眉页脚</h2>
+  <button class="help" type="button" aria-label="页眉页脚帮助" data-tip="可用 {title}、{author}、{url}、{platform}、{duration}、{engine}。[ ] 内变量为空时整段省略。">?</button></div>
+  <form id="frame-form" class="stack"></form>
+  <p id="frame-msg" class="muted" aria-live="polite"></p>
+</section>
+
+<section id="panel-cookie" role="tabpanel" aria-labelledby="tab-cookie" hidden>
+  <div class="section-heading"><h2 class="serif">平台登录</h2><button class="help" type="button" aria-label="Cookie 帮助" data-tip="在独立浏览器窗口登录，自动保存 Cookie，仅用于本机提取视频。">?</button></div>
+  <div id="cookie-platforms" class="cookie-platforms"></div>
+  <h3>代理</h3><form class="stack" onsubmit="return false"><label for="proxy">YouTube</label>
+  <div class="row"><input id="proxy" type="text" autocomplete="off" placeholder="http://127.0.0.1:7897" style="flex:1;min-width:0"><button id="save-proxy" type="button" class="secondary">保存</button></div></form>
+  <p id="settings-msg" class="muted" aria-live="polite"></p>
+</section>
+
+<section id="panel-project" role="tabpanel" aria-labelledby="tab-project" hidden>
+  <div class="section-heading"><h2 class="serif">项目</h2><button class="help" type="button" aria-label="项目目录帮助" data-tip="配置与凭据分开保存。运行记录和日志按目录归档，日志自动脱敏。">?</button></div>
+  <dl id="project-paths" class="project-paths"></dl>
+  <p id="project-logs" class="muted"></p>
+  <p id="project-msg" class="muted" aria-live="polite"></p>
+</section>
+
+</div><!-- .set-body -->
+</div><!-- .set-container -->
+
+<dialog id="layout-preview" aria-labelledby="preview-title"><div class="preview-heading"><strong id="preview-title">版式预览</strong><button id="preview-close" type="button" class="secondary" aria-label="关闭预览">×</button></div><p id="preview-msg" class="muted" aria-live="polite"></p><img id="tpl-preview-img" alt="版式预览" hidden></dialog>
+<script src="/static/common.js"></script>
+<script src="/static/settings.js"></script>
+</body></html>

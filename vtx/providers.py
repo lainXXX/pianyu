@@ -1,0 +1,60 @@
+"""Provider presets supported by the existing ASR and chat adapters.
+
+These are editable starting values, not a list of installed services. Keep provider
+documentation beside the endpoints so settings can link to the actual issuer.
+"""
+
+ASR_PRESETS = [
+    {"preset": "dashscope", "kind": "dashscope", "label": "阿里云百炼", "model": "paraformer-v2",
+     "official_url": "https://bailian.console.aliyun.com/", "console_url": "https://bailian.console.aliyun.com/?tab=model#/api-key",
+     "docs_url": "https://help.aliyun.com/zh/model-studio/recording-file-recognition-api"},
+    {"preset": "tencent", "kind": "tencent", "label": "腾讯云", "model": "16k_zh", "key_hint": "SecretId 和 SecretKey",
+     "official_url": "https://cloud.tencent.com/product/asr", "console_url": "https://console.cloud.tencent.com/cam/capi",
+     "docs_url": "https://cloud.tencent.com/document/product/1093/37823"},
+    {"preset": "openai", "kind": "openai", "label": "OpenAI · Whisper", "base_url": "https://api.openai.com/v1", "model": "whisper-1",
+     "official_url": "https://openai.com/", "console_url": "https://platform.openai.com/api-keys",
+     "docs_url": "https://developers.openai.com/api/docs/guides/speech-to-text"},
+    {"preset": "openai-transcribe", "kind": "openai", "label": "OpenAI · Transcribe Mini", "base_url": "https://api.openai.com/v1",
+     "model": "gpt-4o-mini-transcribe", "timestamps": "approx",
+     "official_url": "https://openai.com/", "console_url": "https://platform.openai.com/api-keys",
+     "docs_url": "https://developers.openai.com/api/docs/guides/speech-to-text"},
+    {"preset": "groq", "kind": "openai", "label": "Groq", "base_url": "https://api.groq.com/openai/v1", "model": "whisper-large-v3-turbo",
+     "official_url": "https://groq.com/", "console_url": "https://console.groq.com/keys", "docs_url": "https://console.groq.com/docs/speech-to-text"},
+    {"preset": "siliconflow", "kind": "openai", "label": "硅基流动", "base_url": "https://api.siliconflow.cn/v1",
+     "model": "FunAudioLLM/SenseVoiceSmall", "timestamps": "approx",
+     "official_url": "https://siliconflow.cn/", "console_url": "https://cloud.siliconflow.cn/account/ak",
+     "docs_url": "https://docs.siliconflow.cn/docs/api/audio-transcriptions-post"},
+    {"preset": "openai-transcribe-full", "kind": "openai", "label": "OpenAI · Transcribe", "base_url": "https://api.openai.com/v1",
+     "model": "gpt-4o-transcribe", "timestamps": "approx",
+     "official_url": "https://openai.com/", "console_url": "https://platform.openai.com/api-keys",
+     "docs_url": "https://developers.openai.com/api/docs/guides/speech-to-text"},
+    {"preset": "custom", "kind": "openai", "label": "", "base_url": "", "model": "", "key_hint": "API key"},
+]
+
+LLM_PRESETS = [
+    {"preset": "deepseek", "label": "DeepSeek", "base_url": "https://api.deepseek.com/v1", "model": "deepseek-flash", "context": 128000,
+     "official_url": "https://www.deepseek.com/", "console_url": "https://platform.deepseek.com/api_keys", "docs_url": "https://api-docs.deepseek.com/"},
+    {"preset": "qwen", "label": "通义千问", "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1", "model": "qwen-plus", "context": 128000, "key_from": "dashscope",
+     "official_url": "https://bailian.console.aliyun.com/", "console_url": "https://bailian.console.aliyun.com/?tab=model#/api-key",
+     "docs_url": "https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope"},
+    {"preset": "kimi", "label": "Kimi", "base_url": "https://api.moonshot.cn/v1", "model": "moonshot-v1-32k", "context": 32000,
+     "official_url": "https://www.moonshot.cn/", "console_url": "https://platform.moonshot.cn/console/api-keys", "docs_url": "https://platform.moonshot.cn/docs/intro"},
+    {"preset": "zhipu", "label": "智谱 GLM", "base_url": "https://open.bigmodel.cn/api/paas/v4", "model": "glm-5.3-flash", "context": 128000,
+     "official_url": "https://bigmodel.cn/", "console_url": "https://bigmodel.cn/usercenter/proj-mgmt/apikeys", "docs_url": "https://docs.bigmodel.cn/cn/guide/develop/openai/introduction"},
+    {"preset": "doubao", "label": "豆包 · 火山方舟", "base_url": "https://ark.cn-beijing.volces.com/api/v3", "model": "", "context": 32000,
+     "model_hint": "模型名或接入点 ID", "official_url": "https://www.volcengine.com/product/ark", "console_url": "https://console.volcengine.com/ark/region:ark+cn-beijing/apiKey",
+     "docs_url": "https://www.volcengine.com/docs/82379/1330626"},
+    {"preset": "openai", "label": "OpenAI", "base_url": "https://api.openai.com/v1", "model": "gpt-4o-mini", "context": 128000,
+     "official_url": "https://openai.com/", "console_url": "https://platform.openai.com/api-keys", "docs_url": "https://developers.openai.com/api/reference/chat/create"},
+    {"preset": "gemini", "label": "Gemini", "base_url": "https://generativelanguage.googleapis.com/v1beta/openai", "model": "gemini-2.5-flash", "context": 1000000,
+     "official_url": "https://ai.google.dev/", "console_url": "https://aistudio.google.com/apikey", "docs_url": "https://ai.google.dev/gemini-api/docs/openai"},
+    {"preset": "siliconflow", "label": "硅基流动", "base_url": "https://api.siliconflow.cn/v1", "model": "deepseek-ai/DeepSeek-V4-Flash", "context": 128000,
+     "official_url": "https://siliconflow.cn/", "console_url": "https://cloud.siliconflow.cn/account/ak", "docs_url": "https://docs.siliconflow.cn/docs/api/chat-completions-post"},
+    {"preset": "groq", "label": "Groq", "base_url": "https://api.groq.com/openai/v1", "model": "llama-3.3-70b-versatile", "context": 128000,
+     "official_url": "https://groq.com/", "console_url": "https://console.groq.com/keys", "docs_url": "https://console.groq.com/docs/openai"},
+    {"preset": "minimax", "label": "MiniMax", "base_url": "https://api.minimax.io/v1", "model": "MiniMax-M2.5", "context": 196608,
+     "official_url": "https://www.minimax.io/", "console_url": "https://platform.minimax.io/user-center/basic-information/interface-key", "docs_url": "https://platform.minimax.io/docs/api-reference/text-openai-api"},
+    {"preset": "mistral", "label": "Mistral", "base_url": "https://api.mistral.ai/v1", "model": "mistral-small-latest", "context": 32000,
+     "official_url": "https://mistral.ai/", "console_url": "https://console.mistral.ai/api-keys", "docs_url": "https://docs.mistral.ai/getting-started/clients"},
+    {"preset": "custom", "label": "", "base_url": "", "model": "", "context": 32000},
+]

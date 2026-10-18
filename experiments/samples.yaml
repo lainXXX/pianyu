@@ -1,0 +1,26 @@
+# 视频测试样本
+# 字幕、语言及数字标签用于测试分组，平台内容和可用性可能变化。
+# link_form: long | short      subs: none | cc | ai | auto      lang: zh | en | mix
+
+samples:
+  # B站
+  - {id: bili-1, platform: bilibili, url: "https://www.bilibili.com/video/BV1wFZ8YBEt4", link_form: long, subs: ai, lang: zh, has_numbers_or_negation: true, duration_s: 197, title: "为什么人类需要不断吃盐，而动物们却不用？"}
+  - {id: bili-2, platform: bilibili, url: "https://b23.tv/BV1WVfcYFEiX", link_form: short, subs: ai, lang: zh, has_numbers_or_negation: true, duration_s: 361, title: "【罗翔】张三侮辱骨灰到底犯不犯法？"}
+  - {id: bili-3, platform: bilibili, url: "https://www.bilibili.com/video/BV1Wv411h7kN?p=3", link_form: long, subs: cc, lang: mix, has_numbers_or_negation: false, duration_s: 2999, title: "李宏毅机器学习 p03 机器学习基本概念简介（上）"}
+  # 抖音
+  - {id: dy-1, platform: douyin, url: "https://www.douyin.com/video/7665606762753510710", link_form: long, subs: none, lang: zh, has_numbers_or_negation: true, duration_s: 727, title: "连续21天十点睡六点起，我真的会变健康吗？"}
+  - {id: dy-2, platform: douyin, url: "https://www.douyin.com/video/7681626630355258665", link_form: long, subs: none, lang: zh, has_numbers_or_negation: true, duration_s: 446, title: "在亚洲最贵国家一日三餐都吃米其林，得花多少钱"}
+  - {id: dy-3, platform: douyin, url: "https://www.douyin.com/video/7689755493836819739", link_form: long, subs: none, lang: zh, has_numbers_or_negation: false, duration_s: 255, title: "哲学/精神分析讲解"}
+  # YouTube
+  - {id: yt-1, platform: youtube, url: "https://www.youtube.com/watch?v=K_RSZC0s8a4", link_form: long, subs: cc, lang: en, has_numbers_or_negation: true, duration_s: 708, title: "The Science Behind Dramatically Better Conversations | TED"}
+  - {id: yt-2, platform: youtube, url: "https://www.youtube.com/watch?v=mNUUThgKVbI", link_form: long, subs: cc, lang: zh, has_numbers_or_negation: true, duration_s: 425, title: "【一步步学金融】第四课 利息与利率"}
+  - {id: yt-3, platform: youtube, url: "https://www.youtube.com/watch?v=HwmLtNIg-eI", link_form: long, subs: none, lang: mix, has_numbers_or_negation: false, duration_s: 782, title: "英语什么水平才能在海外找到Remote工作"}
+
+long:
+  - {id: long-1, platform: youtube, url: "https://www.youtube.com/watch?v=catABDV68wI", duration_min: 64, title: "【HSK5-6+】我们吵架了 | Chinese Podcast", subs: cc}
+
+edge:
+  - {id: edge-silence, kind: silence, url: "https://youtu.be/Ww9kaZfmHzY", note: "10 minutes of silence；同时是 youtu.be 短链"}
+  - {id: edge-music, kind: music, url: "https://www.youtube.com/watch?v=2A951VZuenw", note: "钢琴纯音乐 29 分钟"}
+  - {id: edge-dead, kind: dead_link, url: "https://www.bilibili.com/video/BV1zW411t7YE", note: "view 接口返回 -404"}
+  - {id: edge-multip, kind: multi_part_unspecified, url: "https://www.bilibili.com/video/BV1Wv411h7kN", note: "155 P，不带 ?p="}

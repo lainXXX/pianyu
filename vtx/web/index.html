@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>片语</title>
+<meta name="description" content="片语 · 让视频成为可读的文字">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/static/common.css">
+<style>
+header {padding:0 28px;z-index:5;gap:14px}
+body[data-state=home] header {border-color:transparent}
+body:not([data-state=home]) header .brand-block {display:none}
+.logo {font-size:22px;letter-spacing:.12em}
+header nav {display:flex;gap:4px;align-items:center}
+header nav a,header nav button.secondary {border:0;background:none;color:var(--muted);padding:6px 10px;border-radius:8px;font-weight:400}
+header nav a:hover,header nav button:hover,header nav button[aria-current=page] {background:#eeeae1;color:var(--fg);text-decoration:none}
+.home-back {display:grid;place-items:center;width:34px;height:34px;padding:6px;border:0;background:none;color:var(--muted);border-radius:50%}
+.home-back:hover {background:#eeeae1;color:var(--fg)}
+main {max-width:none;padding:0}
+.home {max-width:760px;margin:0 auto;padding:20vh 24px 60px}
+.home h1 {font-size:44px;line-height:1.2;letter-spacing:0;margin:0 0 40px}
+.field {display:flex;align-items:center;gap:10px;border-bottom:2px solid var(--fg);padding:8px 0}
+.field input {flex:1;min-width:0;border:0;background:none;outline:0;font-size:18px;padding:6px 0;border-radius:0}
+.style {appearance:none;border:1px solid var(--line);background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%237a746a' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 12px center;border-radius:999px;padding:8px 34px 8px 16px;max-width:240px}
+.go {padding:9px 22px;white-space:nowrap}
+.hint {color:var(--muted);font-size:13px;margin-top:14px}
+.home .style-description {margin-top:6px;color:var(--muted);font-size:12px}
+#active-jobs {display:flex;flex-direction:column;gap:8px;margin-top:28px}
+.active-job {display:flex;justify-content:space-between;align-items:center;gap:16px;width:100%;padding:14px 16px;border:1px solid var(--line);background:var(--paper);color:var(--fg);font-size:13px;font-weight:400;text-align:left}
+.active-job > span:first-child {overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.history-state {display:inline-flex;align-items:center;gap:7px;white-space:nowrap;font-size:12px;color:var(--accent);margin-left:12px}
+.history-state.busy::before {content:"";width:6px;height:6px;flex-shrink:0;border-radius:50%;background:var(--accent);animation:pulse 1.6s ease-out infinite}
+.history-state.failed {color:var(--bad)}
+.hrow > div:first-child {min-width:0}.history-title {overflow-wrap:anywhere}
+#status {max-width:760px;margin:0 auto;padding:18vh 24px 24px;background:none;border:0;box-shadow:none}
+#status .k {color:var(--accent);font-size:12px;letter-spacing:.1em}
+#v-title {display:block;font-family:"SimSun",serif;font-size:32px;font-weight:600;line-height:1.3;margin:8px 0 14px}
+#v-meta {font-size:13px}
+.track {height:3px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:30px}
+.track i {display:block;height:100%;background:var(--accent);transition:width .4s ease;position:relative;overflow:hidden}
+.track i::after {content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,#fff9,transparent);animation:flow 1.8s linear infinite}
+@keyframes flow {from {transform:translateX(-100%)} to {transform:translateX(100%)}}
+@keyframes pulse {50% {box-shadow:0 0 0 5px #b4532a18}}
+@keyframes spin {to {transform:rotate(360deg)}}
+ol.stages {list-style:none;display:flex;justify-content:space-between;gap:10px;padding:0;margin:12px 0 0;font-size:13px;color:var(--muted)}
+ol.stages li.done {color:var(--ok)} ol.stages li.current {color:var(--fg);font-weight:500}
+ol.stages li {position:relative;display:flex;align-items:center;gap:7px}
+ol.stages li::before {content:"";width:7px;height:7px;flex-shrink:0;border-radius:50%;border:1px solid var(--line);background:var(--bg)}
+ol.stages li.done::before {background:var(--ok);border-color:var(--ok)}
+ol.stages li.current::before {background:var(--accent);border-color:var(--accent);animation:pulse 1.6s ease-out infinite}
+#status[aria-busy=false] .track i::after {animation:none;display:none}
+#error {max-width:712px;margin:24px auto;padding:20px 24px;box-shadow:none}
+#back-home {display:block;margin:20px auto;background:none;color:var(--accent)}
+.doc-head {max-width:780px;margin:34px auto 8px;padding:0 24px;text-align:center}
+.doc-head h1 {font-size:30px;line-height:1.35;letter-spacing:0;margin:0 0 6px}
+.doc-head h1 a {color:inherit;text-underline-offset:5px;text-decoration-thickness:1px}
+.doc-head .muted {font-size:13px}
+.ctl {display:flex;justify-content:center;gap:14px;align-items:center;margin:18px 0 6px}
+.desc {text-align:center;color:var(--muted);font-size:13px;margin:0 0 4px}
+.recognition-info {padding:12px 24px;border-top:1px solid var(--line);font-size:13px;flex-shrink:0}.recognition-info summary {cursor:pointer;color:var(--muted)}
+#summary {max-width:780px;margin:0 auto 12px;padding:12px 0;text-align:left;font-size:12px;color:var(--muted)}
+#summary .muted {font-size:12px}
+.result-tabs,.tools {display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:16px;margin:10px 24px 20px;font-size:13px;color:var(--muted)}
+#ai-done .tools {max-width:820px;margin:22px auto 28px;padding:12px 0;border-block:1px solid var(--line);justify-content:flex-start;gap:20px}
+.view-switch {display:flex;gap:16px;margin:0;padding:0;border:0}
+#ai-layout {margin-left:auto;max-width:180px;min-width:90px;text-overflow:ellipsis}
+.export-menu {position:relative}
+.export-menu summary {cursor:pointer;list-style:none;padding:2px 0}
+.export-menu summary::-webkit-details-marker {display:none}
+.export-menu summary::after {content:'⌄';margin-left:5px}
+.export-options {position:absolute;right:0;top:32px;min-width:150px;z-index:3;padding:8px 14px;background:var(--paper);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px #1f1d1a0d}
+.export-options button {display:block;width:100%;text-align:left;padding:7px 0!important;white-space:nowrap}
+.result-tabs {border:0;padding:0;margin-bottom:8px}
+.result-tabs button,.tools button.secondary,.tools [role=tab],.tools select {background:none;border:0;border-bottom:1px solid transparent;border-radius:0;padding:2px 0;color:var(--muted);font-weight:400}
+.result-tabs button:hover,.result-tabs button[aria-selected=true],.tools button:hover,.tools [aria-selected=true] {background:none;color:var(--fg);border-color:var(--fg)}
+.tools .sep {color:var(--line)}
+.card.text,.card.orig,#view-ai {background:none;border:0;box-shadow:none;border-radius:0}
+.text,.orig {max-width:680px;margin:0 auto;padding:0 24px 100px;font-size:17px;line-height:2;overflow-wrap:anywhere}
+.text p,.orig p {margin:0 0 1.1em;text-indent:0}
+.orig p {margin-bottom:.6em}
+.orig .t {font:12px ui-monospace,monospace;color:var(--muted);margin-right:10px}
+del {color:#a3382a;background:#f8e3dc;cursor:pointer}
+del.restored {background:none;color:inherit;text-decoration:none;border-bottom:2px dotted var(--ok)}
+button.restore {font-size:11px;padding:0 4px;margin-left:4px;border:0;background:none;color:var(--muted)}
+#view-ai {padding:0 0 100px;margin:0}
+#ai-nodes,#ai-results-box,#ai-title {display:none}
+#ai-meta {max-width:780px;margin:24px auto;padding:0 24px;text-align:center;font-size:12px}
+#ai-output {display:flex;flex-direction:column}
+#ai-done {order:-1}
+#ai-pane-text .text {white-space:normal;border:0!important;padding-top:0!important}
+#ai-text h1 {font-size:27px;margin:1.5em 0 .8em} #ai-text h2 {font-size:23px} #ai-text h3 {font-size:19px}
+#ai-text ul,#ai-text ol {padding-left:1.5em} #ai-text li {margin:.35em 0}
+#ai-text blockquote {margin:1.5em 0;padding:0 20px;border-left:2px solid var(--accent);color:var(--muted)}
+#ai-text pre {padding:16px;background:#eeeae1;border-radius:8px;overflow:auto;font-size:14px;line-height:1.6}
+#ai-text code {font-family:Consolas,monospace;font-size:.88em}
+#ai-text img {max-width:100%;height:auto}
+#ai-text .table-scroll {overflow:auto;margin:1.5em 0}
+#ai-text table {border-collapse:collapse;min-width:100%;font-size:15px;line-height:1.7}
+#ai-text th,#ai-text td {text-align:left;border-bottom:1px solid var(--line);padding:10px 14px;min-width:90px}
+#ai-text th {background:#eeeae1;font-weight:500}
+#ai-change-details {max-width:680px;margin:0 auto;padding:0 24px;font-size:13px;color:var(--muted)}
+#ai-change-details summary {cursor:pointer}
+#ai-refine-bar,#ai-refine-stats {max-width:680px;margin:0 auto 16px;padding:0 24px}
+#ai-refine-stats {padding:12px 0}
+#ai-pages {padding:0 24px;gap:28px!important}
+#ai-pages img {width:min(820px,100%);border-radius:0!important;box-shadow:0 1px 0 var(--line),0 18px 50px -20px rgba(60,40,10,.25)!important}
+#ai-pages img {cursor:zoom-in}
+#image-viewer {width:100vw;max-width:none;height:100dvh;max-height:none;margin:0;border:0;border-radius:0;padding:64px 20px 24px;overflow:auto}
+#image-viewer .viewer-actions {position:fixed;top:12px;right:16px;display:flex;gap:8px;z-index:1}
+#image-viewer img {display:block;width:auto;max-width:100%;margin:auto;cursor:zoom-in}
+#image-viewer.zoomed img {max-width:none;cursor:zoom-out}
+#ai-failed,#ai-status {max-width:680px;margin:24px auto}
+#ai-progress {max-width:680px;margin:36px auto;padding:24px 28px;border:1px solid var(--line);border-radius:16px;background:var(--paper)}
+#ai-progress #ai-status {margin:0;text-align:left;color:var(--fg);font-size:17px}
+#ai-progress[aria-busy=true] #ai-status::before {content:"";display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;margin-right:10px;vertical-align:-2px;animation:spin 1s linear infinite}
+#ai-progress ol.stages {margin:22px 0}
+.source-ready {display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+#preview-source {font-size:13px;padding:6px 14px;white-space:nowrap}
+.tools button.copied {color:var(--ok);border-color:var(--ok)}
+#ai-copy,#copy {min-width:4em}
+#ai-manual {max-width:760px;margin:36px auto 0;background:none;box-shadow:none}
+#ai-manual summary {color:var(--muted);font-size:13px;cursor:pointer}
+#ai-generate {display:block;margin:28px auto}
+.drawer-btn {position:fixed;right:24px;bottom:32px;border:1px solid var(--line);background:var(--paper);color:var(--fg);padding:10px 18px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:4;font-weight:400}
+.drawer-btn:hover {background:#eeeae1}
+.drawer {position:fixed;top:88px;right:0;bottom:0;width:min(440px,92vw);background:var(--paper);border-left:1px solid var(--line);box-shadow:-20px 0 50px -20px rgba(0,0,0,.15);display:flex;flex-direction:column;z-index:6}
+.drawer-tabs {display:flex;gap:18px;padding:16px 24px 0;border-bottom:1px solid var(--line);margin:0;flex-shrink:0;font-size:14px}
+.drawer-tabs button {border:0;background:none;padding:8px 0;color:var(--muted);border-bottom:2px solid transparent;border-radius:0;font-weight:400}
+.drawer-tabs button[aria-selected=true] {color:var(--fg);border-color:var(--accent)}
+.drawer-tabs #drawer-expand {margin-left:auto}
+.drawer-tabs #drawer-expand,.drawer-tabs #drawer-close {font-size:19px;min-width:22px}
+.drawer.fullscreen {inset:0;width:100%;border:0;z-index:12}
+.drawer.fullscreen .drawer-scroll {padding-inline:max(0px,calc((100vw - 880px)/2))}
+.drawer.fullscreen .drawer-tabs {justify-content:center}
+body.drawer-fullscreen {overflow:hidden}
+.generation-fields {display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px;margin-top:16px}
+.generation-fields select {width:100%;min-width:0;text-overflow:ellipsis}
+.generation-fields label {font-size:13px;color:var(--muted)}
+.drawer-scroll {overflow:auto;overscroll-behavior:contain;flex:1}
+.drawer-body {padding:16px 24px 24px;font-size:15px;line-height:1.9;overflow-wrap:anywhere}
+.drawer .text,.drawer .orig {font-size:15px;padding:0;margin:0;max-width:none}
+.drawer .tools {justify-content:flex-start;margin:0;padding:16px 24px;gap:14px;font-size:12px}
+.drawer #ai-manual {margin:0;border:0;border-top:1px solid var(--line);padding:12px 24px}
+.drawer #ai-meta,.drawer #ai-change-details {margin:0;max-width:none;padding:12px 24px;text-align:left;font-size:12px}
+.drawer #ai-refine-bar {padding:8px 0;margin:0;font-size:13px}
+.drawer #ai-refine-stats {padding:8px 0;margin:0}
+.drawer-body p {margin:0 0 1.1em}
+ul.issues {list-style:none;margin:16px 0;padding:0}
+ul.issues li {margin-bottom:14px}
+ul.issues a {font:12px ui-monospace,monospace}
+.hist {max-width:760px;margin:0 auto;padding:48px 24px 100px}
+.hist h1 {font-size:32px;margin:0 0 4px}
+.hist .search {width:100%;margin:22px 0 8px;border:0;border-bottom:1px solid var(--line);background:none;outline:0;padding:10px 0;border-radius:0;font-size:16px}
+.hist .search:focus {border-color:var(--fg)}
+ul.history {list-style:none;padding:0;margin:0}
+.hrow {display:flex;align-items:baseline;gap:20px;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--line)}
+.history-title {border:0;background:none;text-align:left;color:var(--fg);padding:0;border-radius:0;font-size:16px;font-weight:500}
+.history-title:hover {background:none;color:var(--accent)}
+.hrow small {color:var(--muted);white-space:nowrap;font-size:12px}
+.hrow .tags {color:var(--muted);font-size:12.5px;margin-top:4px}
+.hrow .history-delete {border:0;background:none;padding:0;color:var(--muted);font-size:12px}
+.hrow .history-delete:hover {color:var(--bad)}
+.history-side {text-align:right;display:flex;align-items:baseline;gap:14px;flex-shrink:0}
+.ai-runs {display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+.ai-runs button {background:none;border:0;border-radius:0;padding:0;font-size:12px;color:var(--muted)}
+.ai-runs button:hover {background:none;color:var(--accent)}
+.empty {color:var(--muted);padding:24px 0;font-size:14px}
+dialog {border:1px solid var(--line);background:var(--paper);border-radius:12px;width:min(540px,92vw);padding:24px;color:var(--fg)}
+dialog::backdrop {background:rgba(31,29,26,.3)} dialog select {width:100%}
+body:not([data-state=home]) .home {display:none}
+@media(max-width:600px) {
+  header {padding:0 18px}
+  .home {padding-top:16vh}.home h1 {font-size:36px}
+  .field {flex-wrap:wrap;gap:10px}.field input {flex-basis:100%;font-size:17px}
+  .field .style {flex:1;max-width:none}.field .go {margin-left:auto}
+  ol.stages {font-size:11px;gap:8px;flex-wrap:wrap} ol.stages li {gap:5px}
+  #ai-progress {margin:28px 18px;padding:20px}
+  .drawer-tabs {gap:12px;padding-inline:18px;font-size:13px}
+  #v-title {font-size:27px}.doc-head h1 {font-size:26px}
+  .tools,.result-tabs {gap:12px;margin-left:18px;margin-right:18px}
+  #ai-done .tools {margin:20px 18px 26px;gap:16px;font-size:12px;flex-wrap:wrap}
+  #ai-layout {max-width:125px}
+  .view-switch {gap:12px}
+  .hrow {gap:10px}.history-side {flex-direction:column;gap:4px}.hrow small {white-space:normal}
+  .drawer-btn {right:16px;bottom:18px}
+  #ai-manual {margin:28px 18px 0;padding:16px}
+  #error {margin:24px 18px}
+}
+@media(prefers-reduced-motion:reduce) {.track i::after,ol.stages li.current::before,#ai-progress[aria-busy=true] #ai-status::before,.history-state.busy::before {animation:none}.track i {transition:none}}
+</style>
+</head>
+<body data-state="home">
+<header>
+  <button id="home-back" class="home-back" type="button" aria-label="返回首页" title="返回首页" hidden><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m12 5-7 7 7 7M5 12h15"/></svg></button>
+  <div class="brand-block"><a class="logo" href="/">片语</a><span class="brand-description">让视频成为可读的文字</span></div>
+  <nav>
+    <button id="history-btn" type="button" class="secondary">历史</button>
+    <a href="/settings">设置</a>
+  </nav>
+</header>
+<main>
+<section class="home">
+  <h1 class="serif">万语繁音<br>不如静读一遍</h1>
+
+  <form class="field" id="go-form">
+    <label for="url" class="sr-only">视频链接</label>
+    <input id="url" type="text" autocomplete="off" placeholder="粘贴视频链接" required>
+    <label for="style" class="sr-only">输出风格</label>
+    <select id="style" class="style" aria-describedby="style-description">
+      <option value="raw">原文</option>
+      <option value="structure">结构化原文</option>
+      <option value="notes" selected>学习笔记</option>
+      <option value="review">测评对比</option>
+    </select>
+    <button id="go" class="go" type="submit">开始</button>
+  </form>
+  <p class="hint" id="home-hint" role="status" hidden></p>
+  <p class="style-description" id="style-description" aria-live="polite">按主题梳理知识，保留例子与推理</p>
+  <div id="active-jobs" aria-label="进行中的任务" hidden></div>
+</section>
+
+<input type="hidden" id="engine">
+<fieldset class="workflow" id="workflow" hidden>
+  <legend>识别后自动执行</legend>
+  <div id="wf-nodes"></div>
+  <div class="row" style="margin-top:.75rem">
+    <label for="wf-service">模型</label><select id="wf-service"></select>
+    <span class="muted" id="wf-note">勾选的输出会在识别完成后自动处理，按用量计费。</span>
+  </div>
+</fieldset>
+
+<section id="history" class="hist" hidden aria-labelledby="history-heading">
+  <h1 class="serif" id="history-heading">历史 <span class="muted" id="history-count"></span></h1>
+  <label for="history-search" class="sr-only">搜索历史标题</label>
+  <input id="history-search" class="search" type="search" placeholder="搜索标题" autocomplete="off">
+  <ul id="history-list" class="history"></ul>
+</section>
+</main>
+
+<dialog id="part-dialog" aria-labelledby="part-h">
+  <h2 id="part-h" style="margin-top:0">选择分 P</h2>
+  <label for="part-select" class="sr-only">分 P</label>
+  <select id="part-select"></select>
+  <div class="actions">
+    <button id="part-ok" type="button">开始</button>
+    <button id="part-cancel" type="button" class="secondary">取消</button>
+  </div>
+</dialog>
+<dialog id="image-viewer" aria-label="图片预览">
+  <div class="viewer-actions">
+    <button id="image-zoom" class="secondary" type="button" aria-label="原尺寸／适应宽度" title="原尺寸／适应宽度">⤢</button>
+    <button id="image-close" class="secondary" type="button" aria-label="关闭预览" title="关闭">✕</button>
+  </div>
+  <img id="image-large" alt="">
+</dialog>
+
+<div id="status" class="card" hidden aria-live="polite">
+  <div class="k">片语</div>
+  <div id="info"></div>
+  <div class="track" aria-hidden="true"><i id="progress-fill" style="width:8%"></i></div>
+  <ol class="stages" id="stages" aria-label="处理进度"></ol>
+</div>
+<div id="error" class="card error" role="alert" hidden></div>
+
+<button id="back-home" type="button" hidden>返回首页</button>
+<div id="result" hidden>
+  <div class="doc-head">
+    <h1 class="serif"><a id="doc-title" target="_blank" rel="noopener noreferrer" title="打开原视频"></a></h1>
+    <div class="muted"><span id="doc-meta"></span><span id="page-count"></span></div>
+  </div>
+  <div class="ctl">
+    <label for="result-style" class="sr-only">输出风格</label>
+    <select id="result-style" class="style"><option value="raw">原文</option></select>
+  </div>
+  <section id="view-ai" class="card" aria-label="生成结果">
+    <div id="ai-results-box">
+      <strong>这个视频的 AI 结果</strong>
+      <ul id="ai-nodes" class="nodes" aria-label="AI 结果"></ul>
+    </div>
+    <div id="ai-progress" hidden>
+      <p id="ai-status" class="desc" role="status" aria-live="polite"></p>
+      <ol id="ai-stages" class="stages" aria-label="AI 生成进度" hidden></ol>
+      <div id="source-ready" class="source-ready" hidden><span>原文已就绪，可先阅读</span><button id="preview-source" type="button" class="secondary">预览原文</button></div>
+    </div>
+    <button id="ai-generate" type="button" hidden>生成所选风格</button>
+
+    <div id="ai-output" hidden>
+      <h2 id="ai-title"></h2>
+      <div id="ai-failed" class="card error" hidden>
+        <span id="ai-error"></span> <button id="ai-retry" type="button" class="secondary small">重试</button>
+      </div>
+      <div id="ai-done">
+        <div class="tools" role="toolbar" aria-label="阅读与导出">
+          <div class="view-switch" role="tablist" aria-label="阅读视图">
+          <button role="tab" id="ai-tab-img" aria-controls="ai-pane-img" aria-selected="true" type="button">图片</button>
+          <button role="tab" id="ai-tab-text" aria-controls="ai-pane-text" aria-selected="false" type="button">文字</button>
+          </div>
+          <button id="ai-png" type="button" class="secondary">下载图片</button>
+          <button id="ai-copy" type="button" class="secondary" aria-live="polite">复制文本</button>
+          <details class="export-menu"><summary>导出</summary><div class="export-options">
+            <button id="ai-html" type="button" class="secondary">HTML</button>
+            <button id="ai-export" type="button" class="secondary">Markdown</button>
+          </div></details>
+          <select id="ai-layout" aria-label="版式"></select>
+        </div>
+        <p class="desc" id="ai-layout-note" role="status"></p>
+        <section id="ai-pane-img" role="tabpanel" aria-labelledby="ai-tab-img">
+          <div id="ai-pages" style="display:flex;flex-direction:column;align-items:center;gap:12px"></div>
+
+        </section>
+        <section id="ai-pane-text" role="tabpanel" aria-labelledby="ai-tab-text" hidden>
+          <div id="ai-text" class="text serif"></div>
+
+        </section>
+      </div>
+    </div>
+  </section>
+  <button class="drawer-btn" id="drawer-open" type="button" aria-controls="source-drawer" aria-expanded="false">原文与疑点</button>
+  <aside class="drawer" id="source-drawer" aria-label="原文与疑点" hidden>
+    <div class="drawer-tabs" role="tablist" aria-label="原文视图">
+      <button role="tab" id="tab-reading" aria-controls="view-reading" aria-selected="true" type="button">阅读稿</button>
+      <button role="tab" id="tab-original" aria-controls="view-original" aria-selected="false" type="button">识别原稿</button>
+      <button role="tab" id="drawer-issues-tab" aria-controls="drawer-issues" aria-selected="false" type="button">疑点 <span id="drawer-issues-count"></span></button>
+      <button id="drawer-expand" type="button" aria-label="全屏原文" title="全屏" aria-pressed="false">⤢</button>
+      <button id="drawer-close" type="button" aria-label="关闭原文与疑点">✕</button>
+    </div>
+    <div class="drawer-scroll">
+      <div id="source-tools" class="tools">
+        <button id="copy" type="button" class="secondary" aria-live="polite">复制</button>
+        <button id="export-txt" type="button" class="secondary">TXT</button>
+        <button id="export-md" type="button" class="secondary">Markdown</button>
+        <button id="export-srt" type="button" class="secondary">SRT</button>
+      </div>
+      <div class="drawer-body" id="drawer-reading">
+        <section id="view-reading" role="tabpanel" aria-labelledby="tab-reading" class="text serif"></section>
+        <section id="view-original" role="tabpanel" aria-labelledby="tab-original" class="orig" hidden></section>
+      </div>
+      <section id="drawer-issues" class="drawer-body" role="tabpanel" aria-labelledby="drawer-issues-tab" hidden>
+        <ul class="issues" id="issues"></ul>
+      </section>
+      <details class="recognition-info"><summary>处理信息</summary><div id="summary"></div><p class="muted" id="ai-meta"></p>
+        <div id="ai-refine-bar" class="actions" hidden><label><input type="checkbox" id="ai-show-diff"> 修改对照</label></div>
+        <details id="ai-change-details"><summary>修改记录</summary><p class="muted" id="ai-refine-stats"></p></details>
+      </details>
+      <details id="ai-manual" class="card">
+      <summary>本次生成</summary>
+      <div class="generation-fields">
+        <label for="ai-node">风格</label><select id="ai-node"></select>
+        <label for="ai-service">模型</label><select id="ai-service"></select>
+      </div>
+      <div id="ai-custom" hidden>
+        <div class="row" style="margin-top:.5rem">
+          <label for="ai-source">输入</label>
+          <select id="ai-source"><option value="reading">阅读稿</option><option value="original">识别原稿</option></select>
+        </div>
+      </div>
+      <label for="ai-template" style="display:block;font-weight:600;margin-top:.6rem">提示词</label>
+      <textarea id="ai-template" rows="6"></textarea>
+      <div class="actions">
+        <button id="ai-run" type="button">运行</button>
+      </div>
+    </details>
+    </div>
+  </aside>
+</div>
+
+<script src="/static/common.js"></script>
+<script src="/static/app.js?v=20261018-style-description"></script>
+</body>
+</html>
