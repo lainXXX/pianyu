@@ -6,7 +6,7 @@
 <title>片语</title>
 <meta name="description" content="片语 · 让视频成为可读的文字">
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="/static/common.css?v=20261018-interface-polish">
+<link rel="stylesheet" href="/static/common.css?v=20261018-compact-settings">
 <style>
 header {padding:0 28px;z-index:5;gap:14px}
 body[data-state=home] header {border-color:transparent}
@@ -22,7 +22,7 @@ main {max-width:none;padding:0}
 .home h1 {font-size:44px;line-height:1.2;letter-spacing:0;margin:0 0 40px}
 .field {display:flex;align-items:center;gap:10px;border-bottom:2px solid var(--fg);padding:8px 0}
 .field input {flex:1;min-width:0;border:0;background:none;font-size:18px;padding:6px 0;border-radius:0}
-.field:focus-within {border-color:var(--accent)}
+.field:focus-within {border-color:var(--muted)}
 .style {appearance:none;border:1px solid var(--line);background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%237a746a' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 12px center;border-radius:999px;padding:8px 34px 8px 16px;max-width:240px}
 .go {padding:9px 22px;white-space:nowrap}
 .hint {color:var(--muted);font-size:13px;margin-top:14px}
@@ -177,8 +177,9 @@ body:not([data-state=home]) .home {display:none}
 @media(max-width:600px) {
   header {padding:0 18px}
   .home {padding-top:16vh}.home h1 {font-size:36px}
-  .field {flex-wrap:wrap;gap:10px}.field input {flex-basis:100%;font-size:17px}
-  .field .style {flex:1;max-width:none}.field .go {margin-left:auto}
+  .field {gap:8px}.field input {width:0;font-size:15px}
+  .field .style {flex:0 1 120px;min-width:100px;font-size:13px;padding-left:10px;padding-right:26px;background-position:right 10px center}
+  .field .go {flex-shrink:0;padding:9px 14px;font-size:14px}
   ol.stages {font-size:11px;gap:8px;flex-wrap:wrap} ol.stages li {gap:5px}
   #ai-progress {margin:28px 18px;padding:20px}
   .drawer-tabs {gap:6px;padding-inline:12px;font-size:13px}
@@ -373,7 +374,7 @@ body:not([data-state=home]) .home {display:none}
   </aside>
 </div>
 
-<script src="/static/common.js?v=20261018-interface-polish"></script>
-<script src="/static/app.js?v=20261018-interface-polish"></script>
+<script src="/static/common.js?v=20261018-compact-settings"></script>
+<script src="/static/app.js?v=20261018-compact-settings"></script>
 </body>
 </html>

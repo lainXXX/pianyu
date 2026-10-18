@@ -108,7 +108,7 @@ button.small { font-size: .8rem; padding: .3rem .7rem; margin-left: .3rem; verti
 button.danger { color: var(--bad); border-color: var(--bad); background: var(--paper); }
 button.danger:hover { background: #fdf1f0; }
 button:disabled { opacity: .5; cursor: not-allowed; }
-button:focus-visible, a:focus-visible, summary:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+button:focus-visible, a:focus-visible, summary:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
@@ -121,7 +121,7 @@ input[type=text], input[type=password], input[type=number], select, textarea {
   color: var(--fg);
 }
 input[type=text], input[type=password], input[type=number], select { min-height:40px; }
-input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+input:focus, select:focus, textarea:focus { outline:none; border-color:var(--muted); }
 textarea {
   width: 100%;
   font-family: ui-monospace, Consolas, "Microsoft YaHei", monospace;

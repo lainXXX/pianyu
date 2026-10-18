@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>设置 · 片语</title>
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="/static/common.css?v=20261018-interface-polish">
+<link rel="stylesheet" href="/static/common.css?v=20261018-compact-settings">
 <style>
   :root { --fg: #1f1d1a; --muted: #7a746a; }
   body { font: 15px/1.7 "PingFang SC", "Microsoft YaHei", system-ui, sans-serif; }
@@ -25,23 +25,24 @@
   .set-body h3 { font-size: 15px; font-weight: 500; }
   .set-body > section > p:first-of-type { margin-top: 0; }
   .muted { font-size: 14px; }
-  .item-list { list-style: none; padding: 0; margin: 20px 0; }
-  .item-list li { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 14px; padding: 16px 18px; background: var(--paper); border: 1px solid transparent; box-shadow:var(--surface-shadow); border-radius: 12px; margin-bottom: 10px; }
-  .setting-item-info { flex: 1 1 240px; min-width: 0; overflow-wrap: anywhere; font-weight: 500; }
-  .setting-item-info .muted { display: block; font-size: 13px; font-weight: 400; }
+  .item-list { list-style: none; padding: 0; margin: 12px 0; }
+  .item-list li { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--paper); border: 1px solid transparent; box-shadow:var(--surface-shadow); border-radius: 12px; margin-bottom: 8px; }
+  .setting-item-info { flex: 1 1 0; min-width: 0; overflow-wrap: anywhere; font-weight: 500; line-height:1.5; }
+  .setting-item-info .muted { display: block; font-size: 13px; font-weight: 400; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .item-list button.secondary, table.list button.secondary { border: 0; background: none; color: var(--muted); font-size: 13px; font-weight: 400; padding: 2px 0; margin: 0; border-radius: 0; white-space: nowrap; }
   .item-list button.secondary:hover, table.list button.secondary:hover { color: var(--fg); background: none; }
   .item-list button.danger:hover, table.list button.danger:hover { color: var(--bad); }
-  table.list { display: block; width: 100%; border-collapse: separate; margin: 20px 0; }
+  .item-list button.secondary, table.list button.secondary { min-width:36px; min-height:36px; flex-shrink:0; }
+  table.list { display: block; width: 100%; border-collapse: separate; margin: 12px 0; }
   table.list thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   table.list tbody { display: block; }
-  table.list tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; column-gap: 14px; align-items: center; padding: 16px 18px; background: var(--paper); border: 1px solid transparent; box-shadow:var(--surface-shadow); border-radius: 12px; margin-bottom: 10px; }
-  table.list td { border: 0; padding: 0; overflow-wrap: anywhere; }
+  table.list tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 10px; align-items: center; padding: 8px 12px; background: var(--paper); border: 1px solid transparent; box-shadow:var(--surface-shadow); border-radius: 12px; margin-bottom: 8px; }
+  table.list td { border: 0; padding: 0; overflow-wrap: anywhere; line-height:1.5; }
   table.list td:first-child { grid-column: 1; grid-row: 1; font-weight: 500; }
   .default-badge { display: inline-block; font-size: 12px; font-weight: 400; color: var(--accent); border: 1px solid #e9c3b1; background: #fbefe8; border-radius: 999px; padding: 1px 10px; margin-left: 10px; vertical-align: middle; white-space: nowrap; }
   table.list td:nth-child(2) { grid-column: 1; grid-row: 2; color: var(--muted); font-size: 13px; }
-  table.list td:nth-child(3) { grid-column: 2; grid-row: 1 / span 2; color: var(--muted); font-size: 12px; max-width: 120px; }
-  table.list td:last-child:not(:first-child) { grid-column: 3; grid-row: 1 / span 2; display: flex; justify-content: end; gap: 12px; flex-wrap: wrap; max-width: 180px; }
+  table.list td:nth-child(3) { grid-column: 1; grid-row: 3; color: var(--muted); font-size: 12px; }
+  table.list td:last-child:not(:first-child) { grid-column: 2; grid-row: 1 / span 3; display: flex; align-items:center; justify-content: end; gap: 4px; flex-wrap: nowrap; }
   table.list td[colspan] { grid-column: 1 / -1; font-weight: 400; color: var(--muted); }
   .setting-editor { margin: 14px 0 22px; }
   .setting-editor > summary { list-style: none; cursor: pointer; border: 1px solid var(--line); background: var(--paper); border-radius: 999px; padding: 6px 15px; width: max-content; color: var(--accent); text-align: center; font-size: 13px; }
@@ -72,7 +73,6 @@
     .set-nav button { padding: 6px 10px; font-size: 14px; }
     table.list tbody tr { grid-template-columns: minmax(0, 1fr) auto; row-gap: 2px; }
     table.list td:nth-child(3) { grid-column: 1; grid-row: 3; max-width: none; }
-    table.list td:last-child:not(:first-child) { grid-column: 2; grid-row: 1 / span 3; max-width: 135px; gap: 10px; }
     .card { padding: 18px; }
     #cookie-file { max-width: 100%; }
   }
@@ -86,8 +86,7 @@
   .section-tools button.editor-new { margin-left:0; }
   .item-list .package-export { display:grid; place-items:center; width:28px; height:28px; }
   .item-list .package-export svg { width:17px; height:17px; }
-  #out-list .setting-item-info { flex-basis:130px; }
-  .setting-item-actions { display:flex; align-items:center; gap:12px; margin-left:auto; }
+  .setting-item-actions { display:flex; flex-shrink:0; flex-wrap:nowrap; align-items:center; gap:4px; margin-left:auto; }
   .item-list li:focus { outline:2px solid var(--accent); outline-offset:3px; }
   button.editor-new { margin-left:auto; border-radius:999px; padding:5px 16px; font-size:13px; color:var(--accent); }
   .editor-dialog { width:min(760px,calc(100vw - 32px)); max-height:90dvh; padding:0; border:1px solid var(--line); border-radius:16px; background:var(--bg); color:var(--fg); }
@@ -100,14 +99,14 @@
   .help::after { content:attr(data-tip); display:none; position:absolute; left:50%; translate:-50% 0; top:calc(100% + 8px); z-index:30; width:250px; max-width:65vw; padding:10px 13px; background:var(--fg); color:var(--paper); border-radius:8px; box-shadow:0 4px 18px #211c1920; font:12px/1.7 system-ui; text-align:left; }
   .help:hover::after,.help:focus::after { display:block; }
   .choice-grid { display:flex; flex-wrap:wrap; gap:8px 18px; }
-  .choice-grid label { display:flex; align-items:center; gap:6px; min-height:40px; margin:4px 0!important; font-weight:400!important; cursor:pointer; }
+  form.stack .choice-grid label { display:inline-flex; flex:0 1 auto; align-items:center; gap:6px; min-height:32px; margin:0!important; font-weight:400; cursor:pointer; }
   .binding-field { padding:0; border:0; margin:18px 0; }
   .binding-field legend,#of-layouts legend { font-size:13px; font-weight:500; margin-bottom:8px; }
   .field-help { font-size:12px; margin:10px 0 18px; color:var(--muted); }
   .field-help summary { cursor:pointer; }
   .field-help .vars { padding:12px 0 0; font-size:12px; }
   .cookie-platforms { margin:22px 0 32px; }
-  .cookie-platform { display:flex; align-items:center; gap:14px; padding:18px; margin-bottom:10px; border:1px solid transparent; box-shadow:var(--surface-shadow); border-radius:12px; background:var(--paper); }
+  .cookie-platform { display:flex; align-items:center; gap:10px; padding:8px 12px; margin-bottom:8px; border:1px solid transparent; box-shadow:var(--surface-shadow); border-radius:12px; background:var(--paper); }
   .cookie-platform strong { flex:1; }
   .cookie-platform .status { font-size:12px; color:var(--muted); }
   .cookie-platform .status.ok { color:var(--ok); }
@@ -132,7 +131,7 @@
   .secret-eye[aria-pressed=false] .icon-on,.secret-eye[aria-pressed=true] .icon-off { scale:.25; opacity:0; filter:blur(4px); }
   @media(prefers-reduced-motion:reduce) { .secret-eye svg { transition:none; } }
   .section-tools a { display:inline-flex; align-items:center; min-height:40px; }
-  @media(max-width:760px), (pointer:coarse) { .choice-grid label,.section-tools a { min-height:44px; } }
+  @media(max-width:760px), (pointer:coarse) { .section-tools a { min-height:44px; } }
   .secret { display:flex; }
   .secret input { flex:1; }
   [aria-live]:empty { display:none; }
@@ -145,7 +144,7 @@
   #of-layout-boxes { display:flex; flex-wrap:wrap; gap:8px 18px; }
   #of-layout-boxes label { margin:0!important; }
   #tf-html { font-size:12px; }
-  @media(max-width:480px) { header { gap:10px; } header nav a { padding:6px; font-size:13px; } .set-container { padding-inline:16px; } table.list td:last-child:not(:first-child) { max-width:116px; gap:9px; } .cookie-platform { gap:10px; padding:14px; } .item-list li { padding:14px; } .section-heading,.section-tools { gap:8px; } .section-tools button { padding:5px 10px; } }
+  @media(max-width:480px) { header { gap:10px; } header nav a { padding:6px; font-size:13px; } .set-container { padding-inline:16px; } .section-heading,.section-tools { gap:8px; } .section-tools button { padding:5px 10px; } }
 </style>
 </head>
 <body>
@@ -312,6 +311,6 @@
 </div><!-- .set-container -->
 
 <dialog id="layout-preview" aria-labelledby="preview-title"><div class="preview-heading"><strong id="preview-title">版式预览</strong><button id="preview-close" type="button" class="secondary" aria-label="关闭预览">×</button></div><p id="preview-msg" class="muted" aria-live="polite"></p><img id="tpl-preview-img" alt="版式预览" hidden></dialog>
-<script src="/static/common.js?v=20261018-interface-polish"></script>
-<script src="/static/settings.js?v=20261018-interface-polish"></script>
+<script src="/static/common.js?v=20261018-compact-settings"></script>
+<script src="/static/settings.js?v=20261018-compact-settings"></script>
 </body></html>

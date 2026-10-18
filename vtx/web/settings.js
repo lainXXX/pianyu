@@ -425,10 +425,11 @@ function renderLayouts() {
     const styles = outputData.outputs.filter(o => o.layouts.includes(t.id)).map(o => o.name);
     const info = itemInfo(t.name, [`${t.width} px · ${size}`, styles.length ? `${styles.length} 个风格` : "未绑定"].join(" · "));
     info.title = styles.join(" · ");
-    li.append(info,
-      button("预览", "preview", t.id, `预览：${t.name}`), button("编辑", "edit", t.id, `编辑：${t.name}`));
-    if (t.builtin && t.modified) li.append(button("恢复", "reset", t.id, `恢复：${t.name}`));
-    if (!t.builtin) li.append(button("删除", "delete", t.id, `删除：${t.name}`, "secondary small danger"));
+    const actions = document.createElement("div"); actions.className = "setting-item-actions";
+    actions.append(button("预览", "preview", t.id, `预览：${t.name}`), button("编辑", "edit", t.id, `编辑：${t.name}`));
+    if (t.builtin && t.modified) actions.append(button("恢复", "reset", t.id, `恢复：${t.name}`));
+    if (!t.builtin) actions.append(button("删除", "delete", t.id, `删除：${t.name}`, "secondary small danger"));
+    li.append(info, actions);
     return li;
   }));
 }
