@@ -41,7 +41,7 @@ function secretInputs(box, prefix, fields, editing, revealUrl, configured = edit
     input.onfocus = () => { if (input.dataset.masked === "true") input.select(); };
     input.addEventListener("input", () => { input.dataset.saved = "false"; input.dataset.masked = "false"; });
     const eye = document.createElement("button");
-    eye.type = "button"; eye.className = "secondary secret-eye"; eye.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>'; eye.setAttribute("aria-pressed", "false");
+    eye.type = "button"; eye.className = "secondary secret-eye"; eye.innerHTML = '<svg class="icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg><svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m3 3 18 18M10.5 5.1 12 5c6.5 0 10 7 10 7a23 23 0 0 1-3 3.9M6.2 6.2A23 23 0 0 0 2 12s3.5 7 10 7a11 11 0 0 0 5.8-1.8M10 10a3 3 0 0 0 4 4"/></svg>'; eye.setAttribute("aria-pressed", "false");
     eye.setAttribute("aria-label", `显示${f.label}`);
     eye.title = `显示${f.label}`;
     eye.disabled = input.dataset.saved === "true" && !caps.reveal_keys;

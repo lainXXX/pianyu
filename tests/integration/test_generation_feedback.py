@@ -165,6 +165,8 @@ def test_preview_source_fullscreen_alignment_and_escape(feedback_page, server):
     assert page.locator("#source-drawer.fullscreen").count() == 0
     assert page.locator("#drawer-expand").get_attribute("aria-pressed") == "false"
     page.keyboard.press("Escape")
+    assert page.locator("#drawer-open").get_attribute("aria-expanded") == "false"
+    page.locator("#source-drawer").wait_for(state="hidden")
     assert not page.locator("#source-drawer").is_visible()
     page.click("#preview-source")
     assert page.locator("#source-drawer.fullscreen").count() == 0

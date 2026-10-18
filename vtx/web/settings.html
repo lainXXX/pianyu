@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>设置 · 片语</title>
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="/static/common.css?v=20261018-style-packages">
+<link rel="stylesheet" href="/static/common.css?v=20261018-interface-polish">
 <style>
   :root { --fg: #1f1d1a; --muted: #7a746a; }
   body { font: 15px/1.7 "PingFang SC", "Microsoft YaHei", system-ui, sans-serif; }
@@ -26,7 +26,7 @@
   .set-body > section > p:first-of-type { margin-top: 0; }
   .muted { font-size: 14px; }
   .item-list { list-style: none; padding: 0; margin: 20px 0; }
-  .item-list li { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 14px; padding: 16px 18px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; }
+  .item-list li { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 14px; padding: 16px 18px; background: var(--paper); border: 1px solid transparent; box-shadow:var(--surface-shadow); border-radius: 12px; margin-bottom: 10px; }
   .setting-item-info { flex: 1 1 240px; min-width: 0; overflow-wrap: anywhere; font-weight: 500; }
   .setting-item-info .muted { display: block; font-size: 13px; font-weight: 400; }
   .item-list button.secondary, table.list button.secondary { border: 0; background: none; color: var(--muted); font-size: 13px; font-weight: 400; padding: 2px 0; margin: 0; border-radius: 0; white-space: nowrap; }
@@ -35,7 +35,7 @@
   table.list { display: block; width: 100%; border-collapse: separate; margin: 20px 0; }
   table.list thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   table.list tbody { display: block; }
-  table.list tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; column-gap: 14px; align-items: center; padding: 16px 18px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; }
+  table.list tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; column-gap: 14px; align-items: center; padding: 16px 18px; background: var(--paper); border: 1px solid transparent; box-shadow:var(--surface-shadow); border-radius: 12px; margin-bottom: 10px; }
   table.list td { border: 0; padding: 0; overflow-wrap: anywhere; }
   table.list td:first-child { grid-column: 1; grid-row: 1; font-weight: 500; }
   .default-badge { display: inline-block; font-size: 12px; font-weight: 400; color: var(--accent); border: 1px solid #e9c3b1; background: #fbefe8; border-radius: 999px; padding: 1px 10px; margin-left: 10px; vertical-align: middle; white-space: nowrap; }
@@ -64,7 +64,7 @@
   .vars code { background: #eeeae1; padding: 2px 6px; border-radius: 4px; margin-right: 4px; font: 12px ui-monospace, monospace; }
   #frame-form > div { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; margin-top: 14px; }
   #frame-form > div > label { margin-top: 0; }
-  #tpl-preview-img { max-width: 100%; border: 1px solid var(--line); border-radius: 8px; margin-top: 12px; }
+  #tpl-preview-img { max-width: 100%; border: 0; border-radius: 8px; margin-top: 12px; }
   @media (max-width: 760px) {
     header { padding: 0 18px; }
     .set-container { grid-template-columns: minmax(0, 1fr); gap: 28px; padding: 28px 20px 80px; }
@@ -78,11 +78,11 @@
   }
   .back-home { display:grid; place-items:center; width:32px; height:32px; font-size:23px; color:var(--muted); border-radius:50%; }
   .back-home:hover { background:#eeeae1; text-decoration:none; }
-  .section-heading { display:flex; align-items:center; gap:12px; }
+  .section-heading { display:flex; align-items:center; flex-wrap:wrap; gap:12px; }
   .section-heading h2 { margin:0; }
   .section-tools { display:flex; align-items:center; gap:12px; margin-left:auto; }
   .section-tools a { color:var(--muted); font-size:13px; white-space:nowrap; }
-  .section-tools button { padding:5px 12px; font-size:13px; }
+  .section-tools button { padding:5px 12px; font-size:13px; white-space:nowrap; flex-shrink:0; }
   .section-tools button.editor-new { margin-left:0; }
   .item-list .package-export { display:grid; place-items:center; width:28px; height:28px; }
   .item-list .package-export svg { width:17px; height:17px; }
@@ -93,20 +93,21 @@
   .editor-dialog { width:min(760px,calc(100vw - 32px)); max-height:90dvh; padding:0; border:1px solid var(--line); border-radius:16px; background:var(--bg); color:var(--fg); }
   .editor-dialog::backdrop { background:#211c1960; backdrop-filter:blur(4px); }
   .editor-dialog .card { margin:0; border:0; border-radius:0; background:none; }
+  .editor-dialog textarea { min-height:180px; max-height:32dvh; }
   .editor-dialog strong { display:block; padding-right:32px; font-size:20px; font-weight:500; }
   button.editor-close { position:absolute; right:18px; top:16px; width:32px; height:32px; padding:0; border:0; background:none; color:var(--muted); font-size:24px; }
-  button.help { position:relative; border:1px solid #d7d0c4; background:none; color:var(--muted); width:20px; height:20px; padding:0; font:12px/18px system-ui; font-weight:600; }
-  .help::after { content:attr(data-tip); display:none; position:absolute; left:0; top:28px; z-index:30; width:250px; max-width:65vw; padding:10px 13px; background:var(--fg); color:var(--paper); border-radius:8px; box-shadow:0 4px 18px #211c1920; font:12px/1.7 system-ui; text-align:left; }
+  button.help { position:relative; border:0; background:radial-gradient(circle,transparent 9px,#d7d0c4 9px,#d7d0c4 10px,transparent 10px); color:var(--muted); width:40px; height:40px; padding:0; font:12px/1 system-ui; font-weight:600; }
+  .help::after { content:attr(data-tip); display:none; position:absolute; left:50%; translate:-50% 0; top:calc(100% + 8px); z-index:30; width:250px; max-width:65vw; padding:10px 13px; background:var(--fg); color:var(--paper); border-radius:8px; box-shadow:0 4px 18px #211c1920; font:12px/1.7 system-ui; text-align:left; }
   .help:hover::after,.help:focus::after { display:block; }
   .choice-grid { display:flex; flex-wrap:wrap; gap:8px 18px; }
-  .choice-grid label { display:flex; align-items:center; gap:6px; margin:4px 0!important; font-weight:400!important; }
+  .choice-grid label { display:flex; align-items:center; gap:6px; min-height:40px; margin:4px 0!important; font-weight:400!important; cursor:pointer; }
   .binding-field { padding:0; border:0; margin:18px 0; }
   .binding-field legend,#of-layouts legend { font-size:13px; font-weight:500; margin-bottom:8px; }
   .field-help { font-size:12px; margin:10px 0 18px; color:var(--muted); }
   .field-help summary { cursor:pointer; }
   .field-help .vars { padding:12px 0 0; font-size:12px; }
   .cookie-platforms { margin:22px 0 32px; }
-  .cookie-platform { display:flex; align-items:center; gap:14px; padding:18px; margin-bottom:10px; border:1px solid var(--line); border-radius:12px; background:var(--paper); }
+  .cookie-platform { display:flex; align-items:center; gap:14px; padding:18px; margin-bottom:10px; border:1px solid transparent; box-shadow:var(--surface-shadow); border-radius:12px; background:var(--paper); }
   .cookie-platform strong { flex:1; }
   .cookie-platform .status { font-size:12px; color:var(--muted); }
   .cookie-platform .status.ok { color:var(--ok); }
@@ -120,13 +121,18 @@
   .provider-links[hidden] { display:none; }
   .provider-links a { color:var(--accent); }
   .project-paths { margin:22px 0; }
-  .project-paths > div { padding:18px 20px; border:1px solid var(--line); border-radius:12px; background:var(--paper); margin:10px 0; }
+  .project-paths > div { padding:18px 20px; border:1px solid transparent; box-shadow:var(--surface-shadow); border-radius:12px; background:var(--paper); margin:10px 0; }
   .project-paths dt { font-size:13px; color:var(--muted); margin-bottom:5px; }
   .project-paths dd { margin:0; overflow-wrap:anywhere; font:13px/1.8 ui-monospace,Consolas,monospace; user-select:all; }
   .default-choice { font-size:18px!important; color:var(--muted); }
   .default-choice[aria-pressed=true] { color:var(--accent)!important; opacity:1; }
-  .secret-eye { display:grid; place-items:center; width:40px; padding:7px!important; border:0!important; }
-  .secret-eye svg { width:19px; height:19px; }
+  .secret-eye { position:relative; display:grid; place-items:center; width:40px; flex-shrink:0; padding:7px!important; border:0!important; }
+  .secret-eye svg { width:19px; height:19px; scale:1; opacity:1; filter:blur(0); transition:scale .3s cubic-bezier(.2,0,0,1),opacity .3s cubic-bezier(.2,0,0,1),filter .3s cubic-bezier(.2,0,0,1); }
+  .secret-eye .icon-on { position:absolute; }
+  .secret-eye[aria-pressed=false] .icon-on,.secret-eye[aria-pressed=true] .icon-off { scale:.25; opacity:0; filter:blur(4px); }
+  @media(prefers-reduced-motion:reduce) { .secret-eye svg { transition:none; } }
+  .section-tools a { display:inline-flex; align-items:center; min-height:40px; }
+  @media(max-width:760px), (pointer:coarse) { .choice-grid label,.section-tools a { min-height:44px; } }
   .secret { display:flex; }
   .secret input { flex:1; }
   [aria-live]:empty { display:none; }
@@ -306,6 +312,6 @@
 </div><!-- .set-container -->
 
 <dialog id="layout-preview" aria-labelledby="preview-title"><div class="preview-heading"><strong id="preview-title">版式预览</strong><button id="preview-close" type="button" class="secondary" aria-label="关闭预览">×</button></div><p id="preview-msg" class="muted" aria-live="polite"></p><img id="tpl-preview-img" alt="版式预览" hidden></dialog>
-<script src="/static/common.js?v=20261018-style-packages"></script>
-<script src="/static/settings.js?v=20261018-style-packages"></script>
+<script src="/static/common.js?v=20261018-interface-polish"></script>
+<script src="/static/settings.js?v=20261018-interface-polish"></script>
 </body></html>

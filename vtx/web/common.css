@@ -7,9 +7,10 @@
   --accent: #b4532a;
   --bad: #b42318;
   --ok: #4d7c4a;
+  --surface-shadow: 0 0 0 1px rgba(0,0,0,.06), 0 1px 2px -1px rgba(0,0,0,.06), 0 2px 4px rgba(0,0,0,.04);
 }
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 body {
   font: 15px/1.7 "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   color: var(--fg);
@@ -42,15 +43,20 @@ header {
 .brand-block .logo { font-size:32px; line-height:1.2; }
 .brand-description { color:var(--muted); font-size:14px; line-height:1.4; }
 header nav { margin-left: auto; flex-shrink:0; white-space:nowrap; display:flex; align-items:center; gap:4px; }
-header nav a.project-link { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; padding:8px; }
+header nav a.project-link { display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; padding:8px; }
 .project-link svg { width:18px; height:18px; flex-shrink:0; }
 header nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
   color: var(--muted);
   padding: .5rem .75rem;
   border-radius: 8px;
   text-decoration: none;
 }
 header nav a:hover { color: var(--fg); background: #eeeae1; }
+.home-back, .back-home { min-width:40px; min-height:40px; }
 h1 {
   font-size: clamp(2rem, 5vw, 2.5rem);
   font-weight: 600;
@@ -69,10 +75,15 @@ h3 {
   font-weight: 600;
   margin: 1.5rem 0 .75rem;
 }
+h1, h2, h3 { text-wrap: balance; }
+.hint, .brand-description, .field-help, .setting-item-info { text-wrap: pretty; }
+#v-meta, #doc-meta, #ai-meta, #ai-status, #summary, .history-state, .hrow small, .orig .t { font-variant-numeric: tabular-nums; }
 p { margin-block: 1.2em; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 button {
+  min-width: 40px;
+  min-height: 40px;
   font: inherit;
   padding: .625rem 1.25rem;
   border: 0;
@@ -81,9 +92,12 @@ button {
   border-radius: 999px;
   cursor: pointer;
   font-weight: 500;
-  transition: background .2s;
+  transition: background-color .18s, color .18s, border-color .18s, box-shadow .18s, scale .16s cubic-bezier(.2,0,0,1);
 }
 button:hover { background: #9e4623; }
+button:active:not(:disabled):not([data-static]) { scale: .96; }
+header nav a, summary { transition: background-color .18s, color .18s; }
+summary { min-height:40px; align-content:center; }
 button.secondary {
   background: var(--paper);
   color: var(--accent);
@@ -94,7 +108,7 @@ button.small { font-size: .8rem; padding: .3rem .7rem; margin-left: .3rem; verti
 button.danger { color: var(--bad); border-color: var(--bad); background: var(--paper); }
 button.danger:hover { background: #fdf1f0; }
 button:disabled { opacity: .5; cursor: not-allowed; }
-button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+button:focus-visible, a:focus-visible, summary:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
@@ -106,6 +120,7 @@ input[type=text], input[type=password], input[type=number], select, textarea {
   border-radius: 8px;
   color: var(--fg);
 }
+input[type=text], input[type=password], input[type=number], select { min-height:40px; }
 input:focus, select:focus, textarea:focus { border-color: var(--accent); }
 textarea {
   width: 100%;
@@ -168,3 +183,12 @@ main { max-width: 780px; margin: 0 auto; padding: 2rem; }
 #ai-output .rendered h2 { margin-top: 2rem; }
 #ai-output .rendered h3 { margin-top: 1.5rem; font-size: 1.125rem; }
 #ai-output .rendered p { margin: 1rem 0; }
+#ai-pages img, #ai-text img, #image-viewer img, #tpl-preview-img { outline:1px solid rgba(0,0,0,.1); outline-offset:-1px; }
+@media (max-width:760px), (pointer:coarse) {
+  button, header nav a, .home-back, .back-home, summary, input[type=text], input[type=password], input[type=number], select { min-height:44px; }
+  button, header nav a.project-link, .home-back, .back-home { min-width:44px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  button, header nav a, summary { transition:none; }
+  button:active:not(:disabled):not([data-static]) { scale:1; }
+}
