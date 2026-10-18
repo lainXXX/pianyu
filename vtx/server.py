@@ -27,7 +27,7 @@ from vtx.redact import redact
 from vtx.target import UnsupportedURL
 
 MIN_TOKEN = 16
-RENDER_VERSION = 2
+RENDER_VERSION = 3
 FILE_KINDS = ("reading", "original", "srt", "edits", "issues")
 
 
@@ -247,12 +247,16 @@ def create_app(work_dir: Path, token: str = "", run: Optional[Callable] = None,
 
     register_settings(app, store, registry, llm_registry, frames, paths, auth, reveal_keys, config_lock)
     register_browser_login(app, store, work_dir / "browser-profiles", auth, enabled=reveal_keys)
+    from vtx.style_packages import register_style_packages
+
+    register_style_packages(app, outputs, templates, auth, config_lock)
     app.add_event_handler("shutdown", events.close)
 
     # ---- output templates (design 4.12)
     def _out(fn):
         try:
-            return fn()
+            with config_lock:
+                return fn()
         except EngineError as exc:
             raise _engine_error(exc)
 

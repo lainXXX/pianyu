@@ -324,14 +324,19 @@ function itemInfo(name, detail) {
 }
 function renderOutputs() {
   $("out-list").replaceChildren(...outputData.outputs.filter(o => !o.hidden || $("out-show-hidden").checked).map(o => {
-    const li = document.createElement("li");
+    const li = document.createElement("li"); li.dataset.output = o.id; li.tabIndex = -1;
     const info = itemInfo(o.name, [o.kind_label, o.hidden ? "已隐藏" : "", o.modified ? "已修改" : "", `${o.layouts.length} 个版式`].filter(Boolean).join(" · "));
     info.title = o.layouts.map(layoutName).join(" · ");
-    li.append(info,
-      button("编辑", "edit", o.id, `编辑：${o.name}`));
-    if (o.builtin && o.modified) li.append(button("恢复", "reset", o.id, `恢复：${o.name}`));
-    if (o.builtin) li.append(button(o.hidden ? "显示" : "隐藏", o.hidden ? "show" : "hide", o.id, `${o.hidden ? "显示" : "隐藏"}：${o.name}`));
-    else li.append(button("删除", "delete", o.id, `删除：${o.name}`, "secondary small danger"));
+    const actions = document.createElement("div"); actions.className = "setting-item-actions";
+    actions.append(button("编辑", "edit", o.id, `编辑：${o.name}`));
+    li.append(info, actions);
+    if (o.builtin && o.modified) actions.append(button("恢复", "reset", o.id, `恢复：${o.name}`));
+    if (o.builtin) actions.append(button(o.hidden ? "显示" : "隐藏", o.hidden ? "show" : "hide", o.id, `${o.hidden ? "显示" : "隐藏"}：${o.name}`));
+    else actions.append(button("删除", "delete", o.id, `删除：${o.name}`, "secondary small danger"));
+    const download = button("", "export", o.id, `导出：${o.name}`, "secondary small package-export");
+    download.title = `导出：${o.name}`;
+    download.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v4h16v-4"/></svg>';
+    actions.append(download);
     return li;
   }));
 }
@@ -339,6 +344,24 @@ async function loadOutputs() {
   outputData = await json("/api/outputs?hidden=true"); renderOutputs(); renderLayouts();
   if (!$("of-kind").options.length) $("of-kind").replaceChildren(...Object.entries(outputData.kinds).map(([id, label]) => new Option(label, id)));
 }
+$("out-import").onclick = () => $("out-package-file").click();
+$("out-package-file").onchange = async () => {
+  const input = $("out-package-file"), file = input.files[0]; if (!file) return;
+  const trigger = $("out-import"); trigger.disabled = true; trigger.textContent = "导入中…";
+  $("out-list-msg").textContent = "";
+  try {
+    if (file.size > 1024 * 1024) throw new Error("风格包不能超过 1 MB");
+    let body;
+    try { body = JSON.parse(await file.text()); }
+    catch (_) { throw new Error("请选择有效的 JSON 风格包"); }
+    const imported = await send("/api/style-packages/import", "POST", body);
+    await loadTemplates(); await loadOutputs();
+    const item = [...$("out-list").children].find(li => li.dataset.output === imported.output);
+    item?.scrollIntoView({block:"center"}); item?.focus({preventScroll:true});
+    $("out-list-msg").textContent = "已导入";
+  } catch (err) { $("out-list-msg").textContent = err.message; }
+  finally { input.value = ""; trigger.disabled = false; trigger.textContent = "导入"; }
+};
 function fillLayoutBoxes(kind, chosen = []) {
   const layouts = layoutData.filter(t => t.group === groupOfKind(kind));
   const ordered = [...chosen.map(id => layouts.find(t => t.id === id)).filter(Boolean), ...layouts.filter(t => !chosen.includes(t.id))];
@@ -376,12 +399,24 @@ $("out-list").onclick = async e => {
   const b = e.target.closest("button[data-action]"); if (!b) return;
   const o = outputData.outputs.find(x => x.id === b.dataset.id);
   try {
+    if (b.dataset.action === "export") {
+      b.disabled = true;
+      $("out-list-msg").textContent = "";
+      const res = await api(`/api/outputs/${o.id}/package`);
+      if (!res.ok) throw new Error((await res.json().catch(() => ({}))).detail || res.statusText);
+      const url = URL.createObjectURL(await res.blob());
+      const link = document.createElement("a"); link.href = url; link.download = "pianyu-style.json";
+      document.body.append(link); link.click(); link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      return;
+    }
     if (b.dataset.action === "edit") { fillOutputForm(o); openEditor("out-form"); $("of-name").focus(); return; }
     if (b.dataset.action === "reset") await json(`/api/outputs/${o.id}/reset`, {method:"POST"});
     if (["hide", "show"].includes(b.dataset.action)) await json(`/api/outputs/${o.id}/hide?hidden=${b.dataset.action === "hide"}`, {method:"POST"});
     if (b.dataset.action === "delete") { if (!confirm(`删除“${o.name}”？`)) return; await json(`/api/outputs/${o.id}`, {method:"DELETE"}); }
     await loadOutputs(); await loadTemplates(); $("out-list-msg").textContent = "";
   } catch (err) { $("out-list-msg").textContent = err.message; }
+  finally { b.disabled = false; }
 };
 function renderLayouts() {
   for (const group of ["points", "article"]) $("lay-list-" + group).replaceChildren(...layoutData.filter(t => t.group === group).map(t => {
@@ -634,7 +669,7 @@ for (const [id, title, heading, message, reset] of [
   const create = document.createElement("button");
   create.type = "button"; create.className = "secondary editor-new"; create.textContent = "＋ 新建";
   create.dataset.newEditor = id; create.setAttribute("aria-label", title);
-  section.querySelector(".section-heading").append(create);
+  (section.querySelector(".section-tools") || section.querySelector(".section-heading")).append(create);
   const dialog = document.createElement("dialog"); dialog.className = "editor-dialog";
   dialog.setAttribute("aria-labelledby", heading);
   document.body.append(dialog); dialog.append(form); form.append($(message));

@@ -1,10 +1,30 @@
 # 片语
 
+[简体中文](README.md) · [English](README.en.md)
+
 让视频成为可读的文字。
 
 片语是一款在本机运行的视频阅读工具：粘贴链接，提取原文，再按所选风格整理为文字与图片。
 
-![片语首页](docs/images/home.png)
+| 选择风格 | 阅读结果 |
+| --- | --- |
+| ![首页：视频链接与风格选择](docs/images/home.png) | ![阅读页：整理后的文字](docs/images/reader.png) |
+| 生成进度 | 图片排版 |
+| ![生成中的阶段与进度](docs/images/generation.png) | ![应用渲染的版式图片](docs/images/layout.png) |
+
+<details>
+<summary>原文、移动端与风格导入</summary>
+
+![原文与疑点抽屉](docs/images/source.png)
+![风格包导入与管理](docs/images/style-import.png)
+
+| 图片阅读 | 移动端阅读 | 导入版式效果 |
+| --- | --- | --- |
+| ![图片阅读与版式切换](docs/images/image-reader.png) | ![移动端阅读](docs/images/reader-mobile.png) | ![导入风格生成的图片](docs/images/imported-layout.png) |
+
+</details>
+
+图片使用示例内容，识别与 AI 响应由模拟服务提供；页面和 PNG 均由应用实际渲染，不代表真实服务质量验收。
 
 ## 功能
 
@@ -12,7 +32,14 @@
 - 将内容整理为学习笔记、测评对比、行动清单等风格，支持自定义提示词。
 - 阅读 AI 输出、查看原文与疑点，复制文本、下载图片或导出文件。
 - 自定义版式并绑定输出风格，切换版式复用已有内容。
+- 导入、导出风格包，一并分享提示词与版式；每次导入创建独立副本。
 - 管理识别服务、大模型、默认选项与平台登录，保留本地历史。
+
+## 创建与分享风格
+
+将[风格创建指南](docs/style-guide.md)交给 AI，说明你想整理的内容和版面偏好，即可生成包含提示词与版式的 JSON 风格包。在「设置 → 输出风格 → 导入」选择文件；风格右侧的下载图标可导出完整风格包。
+
+指南包含内容类型、提示词变量、模板规则与可用示例，无需修改源码。
 
 ## 安装与启动
 
@@ -88,6 +115,7 @@ vtx/
   server.py          应用组装、任务与结果接口
   pipeline.py        下载、识别、质检与输出流程
   providers.py       厂商预设与官方链接
+  style_packages.py  风格包校验、导入与导出
   observability.py   结构化日志
 tests/
   unit/              模块与接口测试

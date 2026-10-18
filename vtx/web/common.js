@@ -1,6 +1,8 @@
 "use strict";
 // Shared by index.html and settings.html: element lookup, API calls with the optional access token.
 const $ = id => document.getElementById(id);
+const PROJECT_URL = "https://github.com/lainXXX/pianyu";
+const projectCredit = text => text.includes(PROJECT_URL) ? text : `${text.trimEnd()}\n\n片语 · ${PROJECT_URL}\n`;
 let token = new URLSearchParams(location.search).get("token") || sessionStorage.getItem("vtx-token") || "";
 if (token) sessionStorage.setItem("vtx-token", token);
 

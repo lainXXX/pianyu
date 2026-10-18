@@ -50,9 +50,10 @@ def test_footer_short_lines_with_link(html):
     m = re.search(r'<footer[^>]*>(.*?)</footer>', html, re.S)
     assert m
     rows = [re.sub(r"<[^>]+>", "", r) for r in re.findall(r"<div>(.*?)</div>", m.group(1))]
-    assert len(rows) == 2 and all(len(r) <= 90 for r in rows)
+    assert len(rows) == 3 and all(len(r) <= 90 for r in rows)
     assert "B站" in rows[0] and "@示例UP" in rows[0] and "版权" in rows[0] and "AI" in rows[0]
     assert rows[1] == "https://www.bilibili.com/video/BV1wFZ8YBEt4"
+    assert rows[2] == "片语 · https://github.com/lainXXX/pianyu"
 
 
 def test_custom_footer_used():
@@ -90,7 +91,8 @@ def test_long_title_never_clips_disclaimer():
 def test_footer_text_without_uploader():
     t = footer_text({"platform": "douyin", "title": "标题", "video_id": "7"})
     assert t.startswith("来源：抖音 《标题》") and "@" not in t and "版权" in t
-    assert t.endswith("https://www.douyin.com/video/7")
+    assert "https://www.douyin.com/video/7" in t.splitlines()
+    assert t.endswith("https://github.com/lainXXX/pianyu")
 
 
 def test_duration_shown_in_header_only_as_minutes():

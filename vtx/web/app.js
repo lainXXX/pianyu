@@ -280,10 +280,10 @@ async function copyText(button, body, label) {
   } catch { button.textContent = "复制失败"; button.classList.remove("copied"); }
   copyTimers.set(button, setTimeout(() => { button.textContent = label; button.classList.remove("copied"); copyTimers.delete(button); }, 2000));
 }
-$("copy").onclick = () => copyText($("copy"), readingText().join("\n\n"), "复制");
-$("export-txt").onclick = () => download(baseName() + ".txt", headerText() + "\n\n" + readingText().join("\n\n") + "\n", "text/plain");
+$("copy").onclick = () => copyText($("copy"), projectCredit(readingText().join("\n\n")), "复制");
+$("export-txt").onclick = () => download(baseName() + ".txt", projectCredit(headerText() + "\n\n" + readingText().join("\n\n") + "\n"), "text/plain");
 $("export-md").onclick = () => download(baseName() + ".md",
-  `# ${current.meta.title}\n\n` + headerText().split("\n").map(l => `> ${l}  `).join("\n") + "\n\n" + readingText().join("\n\n") + "\n", "text/markdown");
+  projectCredit(`# ${current.meta.title}\n\n` + headerText().split("\n").map(l => `> ${l}  `).join("\n") + "\n\n" + readingText().join("\n\n") + "\n"), "text/markdown");
 $("export-srt").onclick = () => download(baseName() + ".srt", current.srt, "application/x-subrip");
 
 
@@ -669,8 +669,8 @@ $("ai-run").onclick = async () => {
   } catch (e) { if (revision === viewRevision && current?.job.id === jobId) setAIStatus("处理失败：" + e.message); }
   finally { $("ai-run").disabled = !$("ai-service").value; }
 };
-$("ai-copy").onclick = () => copyText($("ai-copy"), shownRun.text ?? $("ai-text").innerText, "复制文本");
-$("ai-export").onclick = () => download(`${baseName()}-${safeName(shownRun.name)}.md`, shownRun.markdown || "", "text/markdown");
+$("ai-copy").onclick = () => copyText($("ai-copy"), projectCredit(shownRun.text ?? $("ai-text").innerText), "复制文本");
+$("ai-export").onclick = () => download(`${baseName()}-${safeName(shownRun.name)}.md`, projectCredit(shownRun.markdown || ""), "text/markdown");
 const safeName = s => (s || "AI").replace(/[\\/:*?"<>|]/g, "_");
 async function downloadRunFile(path, filename) {
   const blob = await (await api(`/api/llm/runs/${shownRun.id}/files/${path}`)).blob();

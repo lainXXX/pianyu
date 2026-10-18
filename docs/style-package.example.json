@@ -1,0 +1,22 @@
+{
+  "format": "pianyu-style",
+  "version": 1,
+  "style": {
+    "name": "主题笔记",
+    "kind": "free",
+    "prompt": "# 主题笔记\n<video_title>{title}</video_title>\n按主题分节，保留例子与推理。用 Markdown 输出。\n<transcript>{text}</transcript>",
+    "layouts": [
+      "paper"
+    ]
+  },
+  "layouts": [
+    {
+      "id": "paper",
+      "name": "纸页",
+      "group": "article",
+      "width": 1080,
+      "height_mode": "fixed:1600",
+      "html": "<!doctype html><html><head><meta charset=\"utf-8\"><style>body{margin:0;padding:64px;font:28px/1.8 sans-serif;color:#29251f;background:#faf8f3}h1{font-size:48px;line-height:1.3}h2{font-size:34px}footer{margin-top:40px;font-size:18px;color:#777;overflow-wrap:anywhere}</style></head><body>{% if first %}<h1>{{ title }}</h1><p>{{ kicker }}</p>{% endif %}<main class=\"content\">{% for block in blocks %}{{ block.html }}{% endfor %}</main>{% if last %}<footer>{% for line in footer_lines %}<div>{{ line }}</div>{% endfor %}</footer>{% endif %}</body></html>"
+    }
+  ]
+}

@@ -41,7 +41,9 @@ header {
 .brand-block { display:flex; flex-direction:column; gap:4px; min-width:0; }
 .brand-block .logo { font-size:32px; line-height:1.2; }
 .brand-description { color:var(--muted); font-size:14px; line-height:1.4; }
-header nav { margin-left: auto; flex-shrink:0; white-space:nowrap; }
+header nav { margin-left: auto; flex-shrink:0; white-space:nowrap; display:flex; align-items:center; gap:4px; }
+header nav a.project-link { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; padding:8px; }
+.project-link svg { width:18px; height:18px; flex-shrink:0; }
 header nav a {
   color: var(--muted);
   padding: .5rem .75rem;

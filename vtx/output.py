@@ -16,6 +16,7 @@ from typing import Dict, List, Sequence
 from vtx.asr import Segment
 from vtx.clean import clean
 from vtx.qc import Issue
+from vtx.project import CREDIT
 
 MAX_NAME = 100
 _ILLEGAL = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
@@ -72,7 +73,7 @@ def write_outputs(out_dir: Path, segments: Sequence[Segment], issues: Sequence[I
 
     billed = meta.get("billed_seconds")
     header = [f"标题：{meta.get('title', '')}", f"链接：{meta.get('url', '')}",
-              f"来源：云端识别 {meta.get('engine', '')}" + (f"，计费 {billed} 秒（{billed / 60:.1f} 分钟）" if billed else ""),
+              f"来源：云端识别 {meta.get('engine', '')}" + (f"，计费 {billed} 秒（{billed / 60:.1f} 分钟）" if billed else "") + f" · {CREDIT}",
               f"口语清理：删除 {len(edits)} 处（见 {paths['edits'].name}）；疑点 {len(issues)} 处（见 {paths['issues'].name}）", ""]
     # newline="\n": identical bytes on Windows and Linux (no \r\n translation)
     lf = {"encoding": "utf-8", "newline": "\n"}

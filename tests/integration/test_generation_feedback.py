@@ -177,7 +177,9 @@ def test_copy_feedback_stays_on_clicked_button(feedback_page):
     page.wait_for_selector("#ai-copy:not([disabled])", state="visible")
     page.click("#ai-copy")
     page.wait_for_selector("#ai-copy.copied:has-text('已复制')")
-    assert page.evaluate("navigator.clipboard.readText()") == run["text"]
+    copied = page.evaluate("navigator.clipboard.readText()")
+    assert copied.startswith(run["text"])
+    assert copied.count("https://github.com/lainXXX/pianyu") == 1
     assert page.locator("#ai-copy-msg, #copy-msg").count() == 0
     assert page.get_by_text("已复制", exact=True).count() == 1
     screenshot(page, "copied")

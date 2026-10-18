@@ -26,6 +26,9 @@ Thumbs.db
 /acceptance/
 /docs/*
 !/docs/architecture.md
+!/docs/style-guide.md
+!/docs/style-guide.en.md
+!/docs/style-package.example.json
 !/docs/images/
 /experiments/*
 !/experiments/eval.py

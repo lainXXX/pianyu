@@ -9,6 +9,7 @@ import json
 import re
 from pathlib import Path
 from vtx.configuration import atomic_write
+from vtx.project import CREDIT
 
 PLATFORMS = {"bilibili": "B站", "douyin": "抖音", "youtube": "YouTube"}
 VARIABLES = ("title", "author", "url", "platform", "duration", "engine")
@@ -16,9 +17,9 @@ DEFAULTS = {
     # top of TXT / Markdown exports of the reading text
     "header": "标题：{title}\n[作者：{author}\n]链接：{url}\n来源：{platform} · 时长 {duration} · 识别 {engine}",
     # end of every AI text / Markdown export
-    "footer": "来源：{platform} [@{author} ]《{title}》 {url}\n内容版权归原作者，AI 整理可能有误，请以原视频为准",
+    "footer": "来源：{platform} [@{author} ]《{title}》 {url}\n内容版权归原作者，AI 整理可能有误，请以原视频为准\n" + CREDIT,
     # bottom of knowledge posters: short, each line is cut to one line in the image
-    "poster_footer": "来源：{platform} [@{author} ]《{title}》 内容版权归原作者，AI 整理可能有误\n{url}",
+    "poster_footer": "来源：{platform} [@{author} ]《{title}》 内容版权归原作者，AI 整理可能有误\n{url}\n" + CREDIT,
 }
 LABELS = {"header": "导出页眉（阅读稿 TXT / Markdown）", "footer": "导出页脚（AI 文本 / Markdown）",
           "poster_footer": "图文页脚（知识图底部）"}
